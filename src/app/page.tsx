@@ -1,3 +1,42 @@
+import Header from '@/components/header';
+import PortfolioGrid from '@/components/portfolio-grid';
+import ContactForm from '@/components/contact-form';
+
 export default function Home() {
-  return <></>;
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1">
+        <section id="hero" className="py-20 text-center">
+            <div className="container">
+                <h1 className="text-5xl font-extrabold tracking-tighter md:text-6xl lg:text-7xl">
+                    Crafting Digital Experiences
+                </h1>
+                <p className="max-w-2xl mx-auto mt-4 text-lg text-muted-foreground">
+                    I build beautiful, functional, and user-friendly web applications.
+                </p>
+            </div>
+        </section>
+
+        <section id="work" className="bg-secondary/50">
+          <PortfolioGrid />
+        </section>
+
+        <section id="contact" className="py-24">
+            <div className="container">
+                <div className="text-center mb-12">
+                    <h2 className="text-4xl font-bold tracking-tight">Get In Touch</h2>
+                    <p className="text-muted-foreground mt-2">Have a project in mind? Let's talk.</p>
+                </div>
+                <ContactForm />
+            </div>
+        </section>
+      </main>
+      <footer className="py-6 border-t">
+        <div className="container text-center text-sm text-muted-foreground">
+            © {new Date().getFullYear()} FolioFlow. All rights reserved.
+        </div>
+      </footer>
+    </div>
+  );
 }
