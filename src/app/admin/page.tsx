@@ -1,6 +1,8 @@
 import AdminLayout from '@/components/admin/admin-layout';
 import PortfolioDataTable from '@/components/admin/portfolio-data-table';
+import ResumeManager from '@/components/admin/resume-manager';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
 
 export default function AdminDashboardPage() {
@@ -16,7 +18,18 @@ export default function AdminDashboardPage() {
                     </div>
                 </header>
                 <main className="flex-1 p-4 md:p-8">
-                    <PortfolioDataTable />
+                    <Tabs defaultValue="portfolio">
+                        <TabsList className="grid w-full grid-cols-2 max-w-md">
+                            <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
+                            <TabsTrigger value="resume">Resume</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="portfolio">
+                            <PortfolioDataTable />
+                        </TabsContent>
+                        <TabsContent value="resume">
+                            <ResumeManager />
+                        </TabsContent>
+                    </Tabs>
                 </main>
             </div>
         </AdminLayout>

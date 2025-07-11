@@ -4,9 +4,12 @@ import ContactForm from '@/components/contact-form';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Download, FileText } from 'lucide-react';
-import Link from 'next/link';
+import { mockResumeData } from '@/lib/data';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function Home() {
+  const resume = mockResumeData; // In a real app, you'd fetch this
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -35,37 +38,34 @@ export default function Home() {
                 <div className="max-w-4xl mx-auto">
                     <Card>
                         <CardContent className="p-8">
-                            <div className="flex items-center gap-6 mb-8">
-                                <FileText className="w-12 h-12 text-accent" />
+                            <div className="flex items-start gap-6 mb-8">
+                                <FileText className="w-12 h-12 text-accent flex-shrink-0" />
                                 <div>
                                     <h3 className="text-2xl font-semibold">Curriculum Vitae</h3>
                                     <p className="text-muted-foreground">Software Engineer & Web Developer</p>
                                 </div>
                             </div>
-                            <div className="space-y-6">
-                                <div>
-                                    <h4 className="font-semibold text-lg mb-2">Summary</h4>
-                                    <p className="text-muted-foreground">Dynamic and innovative software engineer with a knack for creating robust web applications from the ground up. Proficient in modern frameworks and passionate about clean code and user-centric design.</p>
-                                </div>
-                                <div>
-                                    <h4 className="font-semibold text-lg mb-2">Key Skills</h4>
-                                    <ul className="list-disc list-inside text-muted-foreground grid grid-cols-2 md:grid-cols-3 gap-2">
-                                        <li>Next.js & React</li>
-                                        <li>TypeScript</li>
-                                        <li>Node.js</li>
-                                        <li>Tailwind CSS</li>
-                                        <li>GenAI Integration</li>
-                                        <li>Cloud Deployment</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h4 className="font-semibold text-lg mb-2">Experience</h4>
-                                    <p className="text-muted-foreground">Detailed work history available in the full downloadable resume.</p>
-                                </div>
-                            </div>
+                            <ScrollArea className="h-[400px] pr-6">
+                              <div className="space-y-6">
+                                  <div>
+                                      <h4 className="font-semibold text-lg mb-2">Summary</h4>
+                                      <p className="text-muted-foreground">{resume.summary}</p>
+                                  </div>
+                                  <div>
+                                      <h4 className="font-semibold text-lg mb-2">Key Skills</h4>
+                                      <ul className="list-disc list-inside text-muted-foreground grid grid-cols-2 md:grid-cols-3 gap-2">
+                                          {resume.skills.map(skill => <li key={skill}>{skill}</li>)}
+                                      </ul>
+                                  </div>
+                                  <div>
+                                      <h4 className="font-semibold text-lg mb-2">Experience</h4>
+                                      <p className="text-muted-foreground">{resume.experience}</p>
+                                  </div>
+                              </div>
+                            </ScrollArea>
                             <div className="mt-10 text-center">
                                 <Button asChild className="bg-accent hover:bg-accent/90">
-                                    <a href="/cv.pdf" download>
+                                    <a href={resume.cvUrl} download>
                                         <Download className="mr-2 h-4 w-4" />
                                         Download CV
                                     </a>

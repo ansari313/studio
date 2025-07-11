@@ -1,4 +1,4 @@
-import type { PortfolioItem } from '@/lib/types';
+import type { PortfolioItem, ResumeData } from '@/lib/types';
 
 export const mockPortfolioItems: PortfolioItem[] = [
   {
@@ -44,3 +44,11 @@ export const mockPortfolioItems: PortfolioItem[] = [
     tags: ['Branding', 'Graphic Design', 'Logo'],
   },
 ];
+
+
+export const mockResumeData: ResumeData = {
+    summary: 'Dynamic and innovative software engineer with a knack for creating robust web applications from the ground up. Proficient in modern frameworks and passionate about clean code and user-centric design.',
+    skills: ['Next.js & React', 'TypeScript', 'Node.js', 'Tailwind CSS', 'GenAI Integration', 'Cloud Deployment'],
+    experience: 'Detailed work history available in the full downloadable resume.',
+    cvUrl: '/cv.pdf'
+};

@@ -5,3 +5,10 @@ export interface PortfolioItem {
   imageUrl: string;
   tags: string[];
 }
+
+export interface ResumeData {
+  summary: string;
+  skills: string[];
+  experience: string;
+  cvUrl: string;
+}
