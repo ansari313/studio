@@ -16,7 +16,7 @@ export default function Header() {
     <header className="fixed top-0 z-50 w-full bg-transparent text-white">
       <div className="container flex h-20 items-center justify-between">
          <div className="flex-1">
-           <Link href="/" className="text-lg font-bold">
+           <Link href="/" className="text-lg font-bold pl-2.5">
              Umair Sarwar Ansari
            </Link>
         </div>
