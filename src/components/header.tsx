@@ -31,7 +31,7 @@ export default function Header() {
         </nav>
 
         <div className="hidden md:flex flex-1 justify-end">
-          <Button asChild variant="ghost" className="hover:bg-white/10">
+          <Button asChild variant="ghost">
             <Link href="/admin">Admin</Link>
           </Button>
         </div>
