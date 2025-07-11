@@ -11,10 +11,12 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { ResumeData } from '@/lib/types';
 import { mockResumeData } from '@/lib/data';
 import { Badge } from '../ui/badge';
+
+const STORAGE_KEY = 'folioflow_resume_data';
 
 const formSchema = z.object({
   summary: z.string().min(10, 'Summary must be at least 10 characters.'),
@@ -25,19 +27,25 @@ const formSchema = z.object({
 
 export default function ResumeManager() {
   const { toast } = useToast();
-  const [resumeData, setResumeData] = useState<ResumeData>(mockResumeData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [skillInput, setSkillInput] = useState('');
-
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    values: {
-      summary: resumeData.summary,
-      skills: resumeData.skills,
-      experience: resumeData.experience,
-      cvUrl: resumeData.cvUrl,
-    }
+    defaultValues: mockResumeData,
   });
+
+  useEffect(() => {
+    try {
+        const storedData = localStorage.getItem(STORAGE_KEY);
+        if (storedData) {
+            const parsedData = JSON.parse(storedData);
+            form.reset(parsedData);
+        }
+    } catch (e) {
+        console.error("Failed to load resume data from localStorage", e);
+    }
+  }, [form]);
 
   const handleSkillKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && skillInput.trim()) {
@@ -60,9 +68,12 @@ export default function ResumeManager() {
     setIsSubmitting(true);
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
-    setResumeData(values);
-    console.log('Updated Resume Data:', values);
-    toast({ title: 'Resume updated successfully!' });
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(values));
+        toast({ title: 'Resume updated successfully!' });
+    } catch (e) {
+        toast({ title: 'Failed to save data', description: 'Your browser storage might be full or disabled.', variant: 'destructive' });
+    }
     setIsSubmitting(false);
   }
 
@@ -89,7 +100,7 @@ export default function ResumeManager() {
                 <FormControl>
                   <>
                     <div className="flex flex-wrap gap-2 mb-2 p-2 border rounded-md min-h-[40px]">
-                        {field.value.map((skill) => (
+                        {form.watch('skills').map((skill) => (
                             <Badge key={skill} variant="secondary" className="pr-1">
                                 {skill}
                                 <button type="button" onClick={() => removeSkill(skill)} className="ml-1 rounded-full p-0.5 hover:bg-destructive/20">
@@ -114,7 +125,7 @@ export default function ResumeManager() {
             <FormField control={form.control} name="experience" render={({ field }) => (
               <FormItem>
                 <FormLabel>Experience</FormLabel>
-                <FormControl><Textarea placeholder="Describe your experience..." {...field} rows={3} /></FormControl>
+                <FormControl><Textarea placeholder="Describe your experience..." {...field} rows={6} /></FormControl>
                 <FormMessage />
               </FormItem>
             )} />
