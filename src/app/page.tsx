@@ -19,7 +19,7 @@ export default function Home() {
               Trust nothing, test everything.
             </h1>
             <p className="mt-6 text-lg text-foreground/80 max-w-2xl mx-auto">
-              Food photography that brings out the essence of every flavour, making your dishes as irresistible in photos as they are on plate.
+              A true QA doesn&apos;t fear AI — we test it, break it, and make it better. If it can’t handle scrutiny, it’s not ready for release.
             </p>
             <Button asChild size="lg" className="mt-10 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8 py-6 text-base">
                 <Link href="#contact">Let&apos;s Capture Together</Link>
