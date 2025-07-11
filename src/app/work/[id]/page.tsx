@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams, notFound } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
@@ -27,10 +27,6 @@ export default function PortfolioDetailPage() {
             const foundItem = items.find((i) => i.id === id);
             if (foundItem) {
                 setItem(foundItem);
-            } else {
-                // To trigger notFound() in client component, it needs to be after a suspense boundary or a render.
-                // For simplicity here, we'll just set item to null and handle it in the render.
-                // In a real app with SSR, you'd use a server component and notFound().
             }
         } catch (e) {
             console.error("Failed to load portfolio item", e);
@@ -49,7 +45,6 @@ export default function PortfolioDetailPage() {
   }
 
   if (!item) {
-    // This is a client-side equivalent of notFound() for this setup.
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
@@ -98,6 +93,7 @@ export default function PortfolioDetailPage() {
                             fill
                             className="object-cover"
                             priority
+                            data-ai-hint="abstract design"
                         />
                     </div>
                     
@@ -105,12 +101,12 @@ export default function PortfolioDetailPage() {
                        <p>{item.description}</p>
                     </div>
 
-                    <div className="flex flex-wrap gap-2">
-                        <h3 className="text-lg font-semibold mr-2 self-center">Tags:</h3>
+                    <div className="flex flex-wrap gap-2 items-center">
+                        <h3 className="text-lg font-semibold mr-2">Tags:</h3>
                         {item.tags.map((tag) => (
                             <Badge key={tag} variant="secondary" className="px-3 py-1 text-sm">
                                 {tag}
-                            </badge>
+                            </Badge>
                         ))}
                     </div>
                 </div>
