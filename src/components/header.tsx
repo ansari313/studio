@@ -13,7 +13,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="fixed top-0 z-50 w-full bg-transparent text-white">
+    <header className="fixed top-0 z-50 w-full bg-background text-foreground border-b border-border/50">
       <div className="container flex h-20 items-center justify-between">
          <div className="flex-1">
            <Link href="/" className="text-lg font-bold pl-2.5">
@@ -31,7 +31,7 @@ export default function Header() {
         </nav>
 
         <div className="hidden md:flex flex-1 justify-end">
-          <Button asChild variant="ghost">
+          <Button asChild variant="ghost" className="hover:bg-accent/90">
             <Link href="/admin">Admin</Link>
           </Button>
         </div>
@@ -40,12 +40,12 @@ export default function Header() {
         <div className="flex items-center md:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="hover:bg-white/10">
+                <Button variant="ghost" size="icon" className="hover:bg-accent/10">
                   <Menu className="h-6 w-6" />
                   <span className="sr-only">Toggle Menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="bg-background text-foreground border-r-white/10">
+              <SheetContent side="left" className="bg-background text-foreground border-r-border/50">
                 <Link href="/" className="mr-6 flex items-center space-x-2 mb-6">
                    <span className="text-2xl font-bold">Umair Sarwar Ansari</span>
                 </Link>

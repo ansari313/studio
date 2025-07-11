@@ -10,8 +10,8 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <Header />
-      <main className="flex-1">
-        <section id="hero" className="relative flex flex-col items-center justify-center h-screen min-h-[700px] text-center px-4">
+      <main className="flex-1 pt-20">
+        <section id="hero" className="relative flex flex-col items-center justify-center h-screen min-h-[700px] text-center px-4 -mt-20">
           <div className="absolute bottom-8 left-8 w-8 h-8 rounded-full bg-blue-600 border-2 border-white"></div>
           
           <div className="max-w-4xl mx-auto">
