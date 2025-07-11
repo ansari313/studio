@@ -14,6 +14,7 @@ export default function Header() {
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
             <Link href="#work">Work</Link>
+            <Link href="#resume">Resume</Link>
             <Link href="#contact">Contact</Link>
           </nav>
         </div>
@@ -34,6 +35,7 @@ export default function Header() {
                 </Link>
                 <nav className="flex flex-col space-y-4">
                     <Link href="#work">Work</Link>
+                    <Link href="#resume">Resume</Link>
                     <Link href="#contact">Contact</Link>
                     <Link href="/admin">Admin</Link>
                 </nav>

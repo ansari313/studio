@@ -86,3 +86,34 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .animated-gradient-bg::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 200%;
+    height: 200%;
+    background-image: conic-gradient(
+      from var(--gradient-angle),
+      hsl(var(--accent) / 0.8),
+      hsl(var(--primary) / 0.6),
+      hsl(var(--secondary) / 0.8),
+      hsl(var(--accent) / 0.6),
+      hsl(var(--primary) / 0.8)
+    );
+    animation: rotate-gradient 20s linear infinite;
+    z-index: -1;
+  }
+
+  @keyframes rotate-gradient {
+    0% {
+      --gradient-angle: 0deg;
+    }
+    100% {
+      --gradient-angle: 360deg;
+    }
+  }
+}
