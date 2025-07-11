@@ -17,7 +17,7 @@ export default function Header() {
       <div className="container flex h-20 items-center justify-between">
          <div className="flex-1">
            <Link href="/" className="text-lg font-bold">
-             Anna Parker
+             Umair Sarwar Ansari
            </Link>
         </div>
 
@@ -47,7 +47,7 @@ export default function Header() {
               </SheetTrigger>
               <SheetContent side="left" className="bg-background text-foreground border-r-white/10">
                 <Link href="/" className="mr-6 flex items-center space-x-2 mb-6">
-                   <span className="text-2xl font-bold">Anna Parker</span>
+                   <span className="text-2xl font-bold">Umair Sarwar Ansari</span>
                 </Link>
                 <nav className="flex flex-col space-y-4">
                   {navLinks.map(link => (

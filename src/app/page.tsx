@@ -13,7 +13,7 @@ export default function Home() {
       <main className="flex-1">
         <section id="hero" className="relative flex flex-col items-center justify-center h-screen min-h-[700px] text-center px-4">
           <div className="absolute top-8 left-1/2 -translate-x-1/2">
-             <Link href="/" className="text-lg font-medium">Anna Parker</Link>
+             <Link href="/" className="text-lg font-medium">Umair Sarwar Ansari</Link>
           </div>
           <div className="absolute bottom-8 left-8 w-8 h-8 rounded-full bg-blue-600 border-2 border-white"></div>
           
