@@ -1,62 +1,67 @@
+
 import Link from 'next/link';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
-import { Menu, Bot } from 'lucide-react';
+import { Menu } from 'lucide-react';
 
 export default function Header() {
+  const navLinks = [
+    { href: "#hero", label: "Home", active: true },
+    { href: "#work", label: "About Me" },
+    { href: "#resume", label: "Portfolio" },
+    { href: "#contact", label: "Contact" },
+  ];
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
-        <div className="mr-4 hidden md:flex">
-          <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Bot className="h-6 w-6 text-accent" />
-            <span className="font-bold">FolioFlow</span>
-          </Link>
-          <nav className="flex items-center space-x-6 text-sm font-medium">
-            <Link href="#work">Work</Link>
-            <Link href="#resume">Resume</Link>
-            <Link href="#contact">Contact</Link>
-          </nav>
+    <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-sm">
+      <div className="container flex h-20 items-center">
+        <div className="mr-auto flex-1">
+           <Link href="/" className="flex items-center space-x-2">
+             <span className="text-2xl font-bold text-zinc-900">Petrix.</span>
+           </Link>
         </div>
 
-        <div className="flex flex-1 items-center justify-between space-x-2 md:hidden">
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center space-x-8 text-sm font-medium flex-1 justify-center">
+          {navLinks.map(link => (
+            <Link key={link.href} href={link.href} className={link.active ? 'text-red-500' : 'text-zinc-900'}>
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="hidden md:flex flex-1 justify-end">
+          <Button asChild className="bg-zinc-900 text-white hover:bg-zinc-700">
+            <Link href="/admin">Let&apos;s Talk</Link>
+          </Button>
+        </div>
+
+        {/* Mobile Nav */}
+        <div className="flex items-center md:hidden">
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
-                  <Menu className="h-5 w-5" />
+                  <Menu className="h-6 w-6" />
                   <span className="sr-only">Toggle Menu</span>
                 </Button>
               </SheetTrigger>
               <SheetContent side="left">
                 <Link href="/" className="mr-6 flex items-center space-x-2 mb-6">
-                  <Bot className="h-6 w-6 text-accent" />
-                  <span className="font-bold">FolioFlow</span>
+                   <span className="text-2xl font-bold text-zinc-900">Petrix.</span>
                 </Link>
                 <nav className="flex flex-col space-y-4">
-                    <Link href="#work">Work</Link>
-                    <Link href="#resume">Resume</Link>
-                    <Link href="#contact">Contact</Link>
-                    <Link href="/admin">Admin</Link>
+                  {navLinks.map(link => (
+                    <Link key={link.href} href={link.href} className={link.active ? 'text-red-500' : 'text-zinc-900'}>
+                      {link.label}
+                    </Link>
+                  ))}
+                  <Link href="/admin">Admin</Link>
                 </nav>
+                 <Button asChild className="bg-zinc-900 text-white hover:bg-zinc-700 mt-6">
+                    <Link href="/admin">Let&apos;s Talk</Link>
+                </Button>
               </SheetContent>
             </Sheet>
-             <Link href="/" className="flex items-center space-x-2">
-                <Bot className="h-6 w-6 text-accent" />
-                <span className="font-bold">FolioFlow</span>
-            </Link>
-            <Button asChild variant="outline" size="icon">
-              <Link href="/admin">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><path d="M12.22 2h-4.44a2 2 0 0 0-2 2v.4a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 0 2l-.15.08a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h4.44a2 2 0 0 0 2-2v-.4a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1 0-2l.15-.08a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-                <span className="sr-only">Admin Panel</span>
-              </Link>
-            </Button>
-        </div>
-        <div className="hidden md:flex flex-1 justify-end">
-          <nav>
-            <Button asChild variant="outline">
-              <Link href="/admin">Admin Panel</Link>
-            </Button>
-          </nav>
         </div>
       </div>
     </header>
