@@ -12,3 +12,6 @@ export interface ResumeData {
   experience: string;
   cvUrl: string;
 }
+
+// Key for storing portfolio items in localStorage
+export const PORTFOLIO_STORAGE_KEY = 'folioflow_portfolio_items';

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -9,14 +9,36 @@ import { MoreHorizontal, PlusCircle } from 'lucide-react';
 import Image from 'next/image';
 import { mockPortfolioItems } from '@/lib/data';
 import type { PortfolioItem } from '@/lib/types';
+import { PORTFOLIO_STORAGE_KEY } from '@/lib/types';
 import PortfolioForm from './portfolio-form';
 import { useToast } from '@/hooks/use-toast';
 
 export default function PortfolioDataTable() {
-  const [items, setItems] = useState<PortfolioItem[]>(mockPortfolioItems);
+  const [items, setItems] = useState<PortfolioItem[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [itemToEdit, setItemToEdit] = useState<PortfolioItem | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    try {
+      const storedData = localStorage.getItem(PORTFOLIO_STORAGE_KEY);
+      if (storedData) {
+        setItems(JSON.parse(storedData));
+      } else {
+        // If nothing is in storage, initialize with mock data
+        setItems(mockPortfolioItems);
+        localStorage.setItem(PORTFOLIO_STORAGE_KEY, JSON.stringify(mockPortfolioItems));
+      }
+    } catch (e) {
+      console.error("Failed to load portfolio data, using mock data.", e);
+      setItems(mockPortfolioItems);
+    }
+  }, []);
+
+  const persistItems = (newItems: PortfolioItem[]) => {
+    localStorage.setItem(PORTFOLIO_STORAGE_KEY, JSON.stringify(newItems));
+    setItems(newItems);
+  };
 
   const handleAddNew = () => {
     setItemToEdit(null);
@@ -29,19 +51,20 @@ export default function PortfolioDataTable() {
   };
   
   const handleDelete = (id: string) => {
-    // Simulate API call
-    setItems(currentItems => currentItems.filter(item => item.id !== id));
+    const newItems = items.filter(item => item.id !== id);
+    persistItems(newItems);
     toast({ title: 'Item deleted successfully.' });
   };
 
   const handleSave = (item: PortfolioItem) => {
-    setItems(currentItems => {
-        const exists = currentItems.some(i => i.id === item.id);
-        if (exists) {
-            return currentItems.map(i => i.id === item.id ? item : i);
-        }
-        return [item, ...currentItems];
-    });
+    const exists = items.some(i => i.id === item.id);
+    let newItems;
+    if (exists) {
+      newItems = items.map(i => (i.id === item.id ? item : i));
+    } else {
+      newItems = [item, ...items];
+    }
+    persistItems(newItems);
   };
 
   return (

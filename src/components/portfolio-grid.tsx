@@ -1,14 +1,29 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import PortfolioItemCard from './portfolio-item-card';
 import { Input } from './ui/input';
 import { mockPortfolioItems } from '@/lib/data';
 import type { PortfolioItem } from '@/lib/types';
+import { PORTFOLIO_STORAGE_KEY } from '@/lib/types';
 
 export default function PortfolioGrid() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [items, setItems] = useState<PortfolioItem[]>(mockPortfolioItems);
+  const [items, setItems] = useState<PortfolioItem[]>([]);
+
+  useEffect(() => {
+    try {
+      const storedData = localStorage.getItem(PORTFOLIO_STORAGE_KEY);
+      if (storedData) {
+        setItems(JSON.parse(storedData));
+      } else {
+        setItems(mockPortfolioItems);
+      }
+    } catch (e) {
+      console.error("Failed to load portfolio data, using mock data.", e);
+      setItems(mockPortfolioItems);
+    }
+  }, []);
 
   const filteredItems = useMemo(() => {
     if (!searchTerm) return items;
