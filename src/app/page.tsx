@@ -16,7 +16,7 @@ export default function Home() {
           
           <div className="max-w-4xl mx-auto">
             <h1 className="text-6xl md:text-8xl font-serif leading-tight">
-              A true QA doesn&apos;t fear AI — we test it, break it, and make it better. If it can’t handle scrutiny, it’s not ready for release.
+              Trust nothing, test everything.
             </h1>
             <p className="mt-6 text-lg text-foreground/80 max-w-2xl mx-auto">
               Food photography that brings out the essence of every flavour, making your dishes as irresistible in photos as they are on plate.
