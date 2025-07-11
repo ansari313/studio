@@ -88,15 +88,17 @@ export default function PortfolioDetailPage() {
                         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">{item.title}</h1>
                     </div>
                     
-                    <div className="relative aspect-video w-full max-w-3xl mx-auto mb-8 rounded-lg overflow-hidden border">
-                        <Image
-                            src={item.imageUrl}
-                            alt={item.title}
-                            fill
-                            className="object-cover"
-                            priority
-                            data-ai-hint="abstract design"
-                        />
+                    <div className="flex justify-center mb-8">
+                        <div className="relative aspect-video w-full max-w-3xl rounded-lg overflow-hidden border">
+                            <Image
+                                src={item.imageUrl}
+                                alt={item.title}
+                                fill
+                                className="object-cover"
+                                priority
+                                data-ai-hint="abstract design"
+                            />
+                        </div>
                     </div>
                     
                     <div className="prose prose-lg dark:prose-invert max-w-none mx-auto text-center mb-8">
