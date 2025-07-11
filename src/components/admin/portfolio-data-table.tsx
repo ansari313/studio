@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { MoreHorizontal, PlusCircle } from 'lucide-react';
+import { MoreHorizontal, PlusCircle, Video, Image as ImageIcon } from 'lucide-react';
 import Image from 'next/image';
 import { mockPortfolioItems } from '@/lib/data';
 import type { PortfolioItem } from '@/lib/types';
@@ -80,7 +80,7 @@ export default function PortfolioDataTable() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[80px]">Image</TableHead>
+              <TableHead className="w-[80px]">Media</TableHead>
               <TableHead>Title</TableHead>
               <TableHead className="hidden md:table-cell">Description</TableHead>
               <TableHead className="hidden lg:table-cell">Tags</TableHead>
@@ -91,7 +91,13 @@ export default function PortfolioDataTable() {
             {items.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>
-                  <Image src={item.imageUrl} alt={item.title} width={60} height={40} className="rounded object-cover" />
+                    {item.mediaType === 'image' ? (
+                        <Image src={item.mediaUrl} alt={item.title} width={60} height={40} className="rounded object-cover" />
+                    ) : (
+                        <div className="w-[60px] h-[40px] bg-secondary rounded flex items-center justify-center">
+                            <Video className="h-6 w-6 text-muted-foreground" />
+                        </div>
+                    )}
                 </TableCell>
                 <TableCell className="font-medium">{item.title}</TableCell>
                 <TableCell className="hidden md:table-cell max-w-sm truncate">{item.description}</TableCell>

@@ -90,14 +90,24 @@ export default function PortfolioDetailPage() {
                     
                     <div className="flex justify-center mb-8">
                         <div className="relative aspect-video w-full max-w-3xl rounded-lg overflow-hidden border">
-                            <Image
-                                src={item.imageUrl}
-                                alt={item.title}
-                                fill
-                                className="object-cover"
-                                priority
-                                data-ai-hint="abstract design"
-                            />
+                            {item.mediaType === 'image' ? (
+                                <Image
+                                    src={item.mediaUrl}
+                                    alt={item.title}
+                                    fill
+                                    className="object-cover"
+                                    priority
+                                    data-ai-hint="abstract design"
+                                />
+                            ) : (
+                                <video
+                                    src={item.mediaUrl}
+                                    controls
+                                    className="w-full h-full object-cover"
+                                >
+                                    Your browser does not support the video tag.
+                                </video>
+                            )}
                         </div>
                     </div>
                     

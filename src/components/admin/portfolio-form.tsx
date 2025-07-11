@@ -14,11 +14,13 @@ import { useState, useEffect } from 'react';
 import type { PortfolioItem } from '@/lib/types';
 import { suggestPortfolioTags } from '@/ai/flows/suggest-portfolio-tags';
 import { Badge } from '../ui/badge';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
 const formSchema = z.object({
   title: z.string().min(2, 'Title must be at least 2 characters.'),
   description: z.string().min(10, 'Description must be at least 10 characters.'),
-  imageUrl: z.string().url('Please enter a valid URL.'),
+  mediaType: z.enum(['image', 'video']),
+  mediaUrl: z.string().url('Please enter a valid URL.'),
   tags: z.array(z.string()).min(1, 'Please add at least one tag.'),
 });
 
@@ -40,7 +42,8 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
     defaultValues: {
       title: '',
       description: '',
-      imageUrl: '',
+      mediaType: 'image',
+      mediaUrl: '',
       tags: [],
     },
   });
@@ -51,11 +54,12 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
         form.reset({
           title: itemToEdit.title,
           description: itemToEdit.description,
-          imageUrl: itemToEdit.imageUrl,
+          mediaType: itemToEdit.mediaType,
+          mediaUrl: itemToEdit.mediaUrl,
           tags: itemToEdit.tags,
         });
       } else {
-        form.reset({ title: '', description: '', imageUrl: 'https://placehold.co/600x400.png', tags: [] });
+        form.reset({ title: '', description: '', mediaType: 'image', mediaUrl: 'https://placehold.co/600x400.png', tags: [] });
       }
     }
   }, [itemToEdit, form, isOpen]);
@@ -135,13 +139,39 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
                 <FormMessage />
               </FormItem>
             )} />
-            <FormField control={form.control} name="imageUrl" render={({ field }) => (
+            
+            <FormField control={form.control} name="mediaType" render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>Media Type</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex space-x-4"
+                    >
+                      <FormItem className="flex items-center space-x-2 space-y-0">
+                        <FormControl><RadioGroupItem value="image" /></FormControl>
+                        <FormLabel className="font-normal">Image</FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-2 space-y-0">
+                        <FormControl><RadioGroupItem value="video" /></FormControl>
+                        <FormLabel className="font-normal">Video</FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField control={form.control} name="mediaUrl" render={({ field }) => (
               <FormItem>
-                <FormLabel>Image URL</FormLabel>
-                <FormControl><Input placeholder="https://example.com/image.png" {...field} /></FormControl>
+                <FormLabel>Media URL</FormLabel>
+                <FormControl><Input placeholder="https://example.com/media.png" {...field} /></FormControl>
                 <FormMessage />
               </FormItem>
             )} />
+
             <div className="relative">
               <FormField control={form.control} name="description" render={({ field }) => (
                 <FormItem>
