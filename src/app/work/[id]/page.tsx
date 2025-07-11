@@ -84,9 +84,11 @@ export default function PortfolioDetailPage() {
                         </Button>
                     </div>
 
-                    <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">{item.title}</h1>
+                    <div className="text-center">
+                        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">{item.title}</h1>
+                    </div>
                     
-                    <div className="relative aspect-video w-full mb-8 rounded-lg overflow-hidden border">
+                    <div className="relative aspect-video w-full max-w-3xl mx-auto mb-8 rounded-lg overflow-hidden border">
                         <Image
                             src={item.imageUrl}
                             alt={item.title}
@@ -97,11 +99,11 @@ export default function PortfolioDetailPage() {
                         />
                     </div>
                     
-                    <div className="prose prose-lg dark:prose-invert max-w-none mb-8">
+                    <div className="prose prose-lg dark:prose-invert max-w-none mx-auto text-center mb-8">
                        <p>{item.description}</p>
                     </div>
 
-                    <div className="flex flex-wrap gap-2 items-center">
+                    <div className="flex flex-wrap gap-2 items-center justify-center">
                         <h3 className="text-lg font-semibold mr-2">Tags:</h3>
                         {item.tags.map((tag) => (
                             <Badge key={tag} variant="secondary" className="px-3 py-1 text-sm">
@@ -120,3 +122,4 @@ export default function PortfolioDetailPage() {
     </div>
   );
 }
+
