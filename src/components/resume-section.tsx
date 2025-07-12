@@ -44,8 +44,8 @@ export default function ResumeSection() {
         <section id="resume" className="py-24">
             <div className="container">
                 <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold tracking-tight">My Resume</h2>
-                    <p className="text-muted-foreground mt-2">A brief overview of my skills and experience.</p>
+                    <h2 className="text-4xl font-bold tracking-tight">{resume.sectionTitle}</h2>
+                    <p className="text-muted-foreground mt-2">{resume.sectionDescription}</p>
                 </div>
                 <div className="max-w-4xl mx-auto">
                     <Card>
@@ -61,8 +61,8 @@ export default function ResumeSection() {
                                     />
                                 </div>
                                 <div>
-                                    <h3 className="text-2xl font-semibold">Curriculum Vitae</h3>
-                                    <p className="text-muted-foreground">Software Engineer & Web Developer</p>
+                                    <h3 className="text-2xl font-semibold">{resume.cardTitle}</h3>
+                                    <p className="text-muted-foreground">{resume.cardSubtitle}</p>
                                 </div>
                             </div>
                             <ScrollArea className="h-[400px] pr-6">

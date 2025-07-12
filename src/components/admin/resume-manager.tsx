@@ -19,6 +19,10 @@ import { Badge } from '../ui/badge';
 const STORAGE_KEY = 'folioflow_resume_data';
 
 const formSchema = z.object({
+  sectionTitle: z.string().min(1, 'Section title is required.'),
+  sectionDescription: z.string().min(1, 'Section description is required.'),
+  cardTitle: z.string().min(1, 'Card title is required.'),
+  cardSubtitle: z.string().min(1, 'Card subtitle is required.'),
   summary: z.string().min(10, 'Summary must be at least 10 characters.'),
   skills: z.array(z.string()).min(1, 'Please add at least one skill.'),
   experience: z.string().min(10, 'Experience section must be at least 10 characters.'),
@@ -98,6 +102,37 @@ export default function ResumeManager() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField control={form.control} name="sectionTitle" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Section Title</FormLabel>
+                  <FormControl><Input placeholder="My Resume" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="sectionDescription" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Section Description</FormLabel>
+                  <FormControl><Input placeholder="A brief overview..." {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="cardTitle" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Card Title</FormLabel>
+                  <FormControl><Input placeholder="Curriculum Vitae" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="cardSubtitle" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Card Subtitle</FormLabel>
+                  <FormControl><Input placeholder="Software Engineer" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+            </div>
+
             <FormField control={form.control} name="summary" render={({ field }) => (
               <FormItem>
                 <FormLabel>Summary</FormLabel>
