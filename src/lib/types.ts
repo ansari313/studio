@@ -1,3 +1,4 @@
+
 export interface PortfolioItem {
   id: string;
   title: string;
@@ -12,6 +13,7 @@ export interface ResumeData {
   skills: string[];
   experience: string;
   cvUrl: string;
+  imageUrl: string;
 }
 
 // Key for storing portfolio items in localStorage

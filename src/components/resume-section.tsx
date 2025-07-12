@@ -1,12 +1,14 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Download, FileText, Loader2 } from 'lucide-react';
+import { Download, Loader2 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { mockResumeData } from '@/lib/data';
 import type { ResumeData } from '@/lib/types';
+import Image from 'next/image';
 
 const STORAGE_KEY = 'folioflow_resume_data';
 
@@ -49,7 +51,15 @@ export default function ResumeSection() {
                     <Card>
                         <CardContent className="p-8">
                             <div className="flex items-start gap-6 mb-8">
-                                <FileText className="w-12 h-12 text-accent flex-shrink-0" />
+                                <div className="relative w-24 h-24 rounded-full overflow-hidden flex-shrink-0 border-2 border-primary/20">
+                                    <Image
+                                        src={resume.imageUrl}
+                                        alt="Umair Sarwar Ansari"
+                                        fill
+                                        className="object-cover"
+                                        data-ai-hint="professional headshot"
+                                    />
+                                </div>
                                 <div>
                                     <h3 className="text-2xl font-semibold">Curriculum Vitae</h3>
                                     <p className="text-muted-foreground">Software Engineer & Web Developer</p>

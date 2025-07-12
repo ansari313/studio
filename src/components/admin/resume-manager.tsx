@@ -23,6 +23,7 @@ const formSchema = z.object({
   skills: z.array(z.string()).min(1, 'Please add at least one skill.'),
   experience: z.string().min(10, 'Experience section must be at least 10 characters.'),
   cvUrl: z.string().url('Please enter a valid URL for the CV.'),
+  imageUrl: z.string().url('Please enter a valid URL for the image.'),
 });
 
 export default function ResumeManager() {
@@ -90,6 +91,14 @@ export default function ResumeManager() {
               <FormItem>
                 <FormLabel>Summary</FormLabel>
                 <FormControl><Textarea placeholder="A brief summary about you..." {...field} rows={4} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+
+             <FormField control={form.control} name="imageUrl" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Image URL</FormLabel>
+                <FormControl><Input placeholder="https://placehold.co/100x100.png" {...field} /></FormControl>
                 <FormMessage />
               </FormItem>
             )} />

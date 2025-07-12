@@ -56,5 +56,6 @@ export const mockResumeData: ResumeData = {
     summary: 'Dynamic and innovative software engineer with a knack for creating robust web applications from the ground up. Proficient in modern frameworks and passionate about clean code and user-centric design.',
     skills: ['Next.js & React', 'TypeScript', 'Node.js', 'Tailwind CSS', 'GenAI Integration', 'Cloud Deployment'],
     experience: 'Detailed work history available in the full downloadable resume.',
-    cvUrl: '/cv.pdf'
+    cvUrl: '/cv.pdf',
+    imageUrl: 'https://placehold.co/100x100.png'
 };
