@@ -20,7 +20,7 @@ const formSchema = z.object({
   title: z.string().min(2, 'Title must be at least 2 characters.'),
   description: z.string().min(10, 'Description must be at least 10 characters.'),
   mediaType: z.enum(['image', 'video']),
-  mediaUrl: z.string().url('Please enter a valid URL.'),
+  mediaUrl: z.string().min(1, 'Please provide a media URL or upload a file.'),
   tags: z.array(z.string()).min(1, 'Please add at least one tag.'),
 });
 
@@ -47,6 +47,8 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
       tags: [],
     },
   });
+
+  const mediaType = form.watch('mediaType');
 
   useEffect(() => {
     if (isOpen) {
@@ -110,6 +112,17 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
     }
   };
 
+   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        form.setValue('mediaUrl', reader.result as string, { shouldValidate: true });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     // Simulate API call
@@ -166,8 +179,21 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
 
             <FormField control={form.control} name="mediaUrl" render={({ field }) => (
               <FormItem>
-                <FormLabel>Media URL</FormLabel>
-                <FormControl><Input placeholder="https://example.com/media.png" {...field} /></FormControl>
+                <FormLabel>{mediaType === 'image' ? 'Image' : 'Video URL'}</FormLabel>
+                <FormControl>
+                  {mediaType === 'image' ? (
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+                  ) : (
+                    <Input 
+                      placeholder="https://example.com/media.mp4" 
+                      {...field}
+                    />
+                  )}
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )} />

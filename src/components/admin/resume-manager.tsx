@@ -23,7 +23,7 @@ const formSchema = z.object({
   skills: z.array(z.string()).min(1, 'Please add at least one skill.'),
   experience: z.string().min(10, 'Experience section must be at least 10 characters.'),
   cvUrl: z.string().url('Please enter a valid URL for the CV.'),
-  imageUrl: z.string().url('Please enter a valid URL for the image.'),
+  imageUrl: z.string().min(1, 'Please upload an image.'),
 });
 
 export default function ResumeManager() {
@@ -64,6 +64,17 @@ export default function ResumeManager() {
     const currentSkills = form.getValues('skills');
     form.setValue('skills', currentSkills.filter((skill) => skill !== skillToRemove), { shouldValidate: true });
   };
+  
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        form.setValue('imageUrl', reader.result as string, { shouldValidate: true });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
@@ -97,8 +108,14 @@ export default function ResumeManager() {
 
              <FormField control={form.control} name="imageUrl" render={({ field }) => (
               <FormItem>
-                <FormLabel>Image URL</FormLabel>
-                <FormControl><Input placeholder="https://placehold.co/100x100.png" {...field} /></FormControl>
+                <FormLabel>Your Image</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="file" 
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )} />
