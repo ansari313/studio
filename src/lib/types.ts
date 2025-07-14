@@ -9,8 +9,6 @@ export interface PortfolioItem {
 }
 
 export interface ResumeData {
-  sectionTitle: string;
-  sectionDescription: string;
   cardTitle: string;
   cardSubtitle: string;
   summary: string;

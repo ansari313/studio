@@ -17,8 +17,6 @@ import { Badge } from '../ui/badge';
 import { getResumeData, saveResumeData } from '@/actions/resume-actions';
 
 const formSchema = z.object({
-  sectionTitle: z.string().min(1, 'Section title is required.'),
-  sectionDescription: z.string().min(1, 'Section description is required.'),
   cardTitle: z.string().min(1, 'Card title is required.'),
   cardSubtitle: z.string().min(1, 'Card subtitle is required.'),
   summary: z.string().min(10, 'Summary must be at least 10 characters.'),
@@ -37,8 +35,6 @@ export default function ResumeManager() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      sectionTitle: '',
-      sectionDescription: '',
       cardTitle: '',
       cardSubtitle: '',
       summary: '',
@@ -130,20 +126,6 @@ export default function ResumeManager() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField control={form.control} name="sectionTitle" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Section Title</FormLabel>
-                  <FormControl><Input placeholder="My Resume" {...field} /></FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} />
-              <FormField control={form.control} name="sectionDescription" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Section Description</FormLabel>
-                  <FormControl><Input placeholder="A brief overview..." {...field} /></FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} />
               <FormField control={form.control} name="cardTitle" render={({ field }) => (
                 <FormItem>
                   <FormLabel>Card Title</FormLabel>

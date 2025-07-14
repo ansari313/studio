@@ -36,8 +36,8 @@ export default function ResumeSection() {
         <section id="resume" className="py-24">
             <div className="container">
                 <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold tracking-tight">{resume.sectionTitle}</h2>
-                    <p className="text-muted-foreground mt-2">{resume.sectionDescription}</p>
+                    <h2 className="text-4xl font-bold tracking-tight">My Resume</h2>
+                    <p className="text-muted-foreground mt-2">A brief overview of my skills and experience.</p>
                 </div>
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
                     <div className="md:col-span-1 flex justify-center">

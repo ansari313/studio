@@ -11,22 +11,21 @@ const deserializeData = (data: any): ResumeData => ({
 });
 
 export async function getResumeData(): Promise<ResumeData | null> {
-    const data = db.prepare('SELECT * FROM resume WHERE id = 1').get();
+    // Select all fields except the old static ones.
+    const data = db.prepare('SELECT cardTitle, cardSubtitle, summary, skills, experience, cvUrl, imageUrl FROM resume WHERE id = 1').get();
     if (!data) return null;
     return deserializeData(data);
 }
 
 export async function saveResumeData(data: ResumeData) {
-    const { sectionTitle, sectionDescription, cardTitle, cardSubtitle, summary, skills, experience, cvUrl, imageUrl } = data;
+    const { cardTitle, cardSubtitle, summary, skills, experience, cvUrl, imageUrl } = data;
     const serializedSkills = JSON.stringify(skills);
 
     const stmt = db.prepare(`
         INSERT INTO resume (id, sectionTitle, sectionDescription, cardTitle, cardSubtitle, summary, skills, experience, cvUrl, imageUrl) 
-        VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (1, 'My Resume', 'A brief overview of my skills and experience.', ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(id) 
         DO UPDATE SET
-            sectionTitle = excluded.sectionTitle,
-            sectionDescription = excluded.sectionDescription,
             cardTitle = excluded.cardTitle,
             cardSubtitle = excluded.cardSubtitle,
             summary = excluded.summary,
@@ -36,7 +35,7 @@ export async function saveResumeData(data: ResumeData) {
             imageUrl = excluded.imageUrl;
     `);
 
-    stmt.run(sectionTitle, sectionDescription, cardTitle, cardSubtitle, summary, serializedSkills, experience, cvUrl, imageUrl);
+    stmt.run(cardTitle, cardSubtitle, summary, serializedSkills, experience, cvUrl, imageUrl);
 
     revalidatePath('/');
     revalidatePath('/admin');
