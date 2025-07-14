@@ -55,11 +55,11 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="work" className="py-24 bg-secondary/20 animate-slide-in-up">
+        <section id="work" className="py-16 bg-secondary/20 animate-slide-in-up">
           <PortfolioGrid />
         </section>
 
-        <section className="py-24 bg-background">
+        <section className="py-16 bg-background">
           <div className="container">
             <div className="text-center mb-12">
                 <h2 className="text-4xl font-bold tracking-tight">Catch Me</h2>
@@ -76,7 +76,7 @@ export default function Home() {
 
         <ResumeSection />
 
-        <section id="contact" className="py-24 bg-secondary/20">
+        <section id="contact" className="py-16 bg-secondary/20">
             <div className="container">
                 <div className="text-center mb-12">
                     <h2 className="text-4xl font-bold tracking-tight">Get In Touch</h2>
@@ -94,3 +94,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
