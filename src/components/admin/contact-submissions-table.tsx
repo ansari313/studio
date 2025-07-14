@@ -6,7 +6,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { MoreHorizontal } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
+import { MoreHorizontal, Eye } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { ContactSubmission } from '@/lib/types';
 import { CONTACT_SUBMISSIONS_STORAGE_KEY } from '@/lib/types';
@@ -14,6 +15,8 @@ import { format } from 'date-fns';
 
 export default function ContactSubmissionsTable() {
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
+  const [selectedSubmission, setSelectedSubmission] = useState<ContactSubmission | null>(null);
+  const [isViewOpen, setIsViewOpen] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -41,6 +44,11 @@ export default function ContactSubmissionsTable() {
     const newSubmissions = submissions.filter(item => item.id !== id);
     persistSubmissions(newSubmissions);
     toast({ title: 'Message deleted successfully.' });
+  };
+
+  const handleView = (submission: ContactSubmission) => {
+    setSelectedSubmission(submission);
+    setIsViewOpen(true);
   };
 
   return (
@@ -79,6 +87,10 @@ export default function ContactSubmissionsTable() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleView(submission)}>
+                            <Eye className="mr-2 h-4 w-4" />
+                            View
+                        </DropdownMenuItem>
                         <AlertDialogTrigger asChild>
                            <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10">Delete</DropdownMenuItem>
                         </AlertDialogTrigger>
@@ -112,6 +124,29 @@ export default function ContactSubmissionsTable() {
           </TableBody>
         </Table>
       </div>
+
+       <Dialog open={isViewOpen} onOpenChange={setIsViewOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Message from {selectedSubmission?.name}</DialogTitle>
+            <DialogDescription>
+              {selectedSubmission && format(new Date(selectedSubmission.submittedAt), 'PPP p')}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedSubmission && (
+            <div className="space-y-4 py-4">
+              <div>
+                <h4 className="font-semibold">Email</h4>
+                <p className="text-muted-foreground">{selectedSubmission.email}</p>
+              </div>
+              <div>
+                <h4 className="font-semibold">Message</h4>
+                <p className="text-muted-foreground whitespace-pre-wrap">{selectedSubmission.message}</p>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
