@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -6,27 +5,18 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, Loader2 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { mockResumeData } from '@/lib/data';
 import type { ResumeData } from '@/lib/types';
-import Image from 'next/image';
-
-const STORAGE_KEY = 'folioflow_resume_data';
+import { getResumeData } from '@/actions/resume-actions';
 
 export default function ResumeSection() {
     const [resume, setResume] = useState<ResumeData | null>(null);
 
     useEffect(() => {
-        try {
-            const storedData = localStorage.getItem(STORAGE_KEY);
-            if (storedData) {
-                setResume(JSON.parse(storedData));
-            } else {
-                setResume(mockResumeData);
-            }
-        } catch (e) {
-            console.error("Failed to load resume data, using mock data.", e);
-            setResume(mockResumeData);
-        }
+        getResumeData()
+            .then(setResume)
+            .catch(e => {
+                console.error("Failed to load resume data", e);
+            });
     }, []);
 
     if (!resume) {

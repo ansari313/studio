@@ -5,40 +5,36 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { MoreHorizontal, PlusCircle, Video, Image as ImageIcon } from 'lucide-react';
+import { MoreHorizontal, PlusCircle, Video, Image as ImageIcon, Loader2 } from 'lucide-react';
 import Image from 'next/image';
-import { mockPortfolioItems } from '@/lib/data';
 import type { PortfolioItem } from '@/lib/types';
-import { PORTFOLIO_STORAGE_KEY } from '@/lib/types';
 import PortfolioForm from './portfolio-form';
 import { useToast } from '@/hooks/use-toast';
+import { getPortfolioItems, deletePortfolioItem, savePortfolioItem } from '@/actions/portfolio-actions';
 
 export default function PortfolioDataTable() {
   const [items, setItems] = useState<PortfolioItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [itemToEdit, setItemToEdit] = useState<PortfolioItem | null>(null);
   const { toast } = useToast();
 
-  useEffect(() => {
+  const fetchItems = async () => {
+    setLoading(true);
     try {
-      const storedData = localStorage.getItem(PORTFOLIO_STORAGE_KEY);
-      if (storedData) {
-        setItems(JSON.parse(storedData));
-      } else {
-        // If nothing is in storage, initialize with mock data
-        setItems(mockPortfolioItems);
-        localStorage.setItem(PORTFOLIO_STORAGE_KEY, JSON.stringify(mockPortfolioItems));
-      }
+      const portfolioItems = await getPortfolioItems();
+      setItems(portfolioItems);
     } catch (e) {
-      console.error("Failed to load portfolio data, using mock data.", e);
-      setItems(mockPortfolioItems);
+      console.error("Failed to load portfolio data", e);
+      toast({ title: 'Error', description: 'Failed to load portfolio items.', variant: 'destructive'});
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  }
 
-  const persistItems = (newItems: PortfolioItem[]) => {
-    localStorage.setItem(PORTFOLIO_STORAGE_KEY, JSON.stringify(newItems));
-    setItems(newItems);
-  };
+  useEffect(() => {
+    fetchItems();
+  }, []);
 
   const handleAddNew = () => {
     setItemToEdit(null);
@@ -50,21 +46,25 @@ export default function PortfolioDataTable() {
     setIsFormOpen(true);
   };
   
-  const handleDelete = (id: string) => {
-    const newItems = items.filter(item => item.id !== id);
-    persistItems(newItems);
-    toast({ title: 'Item deleted successfully.' });
+  const handleDelete = async (id: string) => {
+    try {
+      await deletePortfolioItem(id);
+      toast({ title: 'Item deleted successfully.' });
+      fetchItems(); // Refresh list
+    } catch(e) {
+      toast({ title: 'Error', description: 'Failed to delete portfolio item.', variant: 'destructive'});
+    }
   };
 
-  const handleSave = (item: PortfolioItem) => {
-    const exists = items.some(i => i.id === item.id);
-    let newItems;
-    if (exists) {
-      newItems = items.map(i => (i.id === item.id ? item : i));
-    } else {
-      newItems = [item, ...items];
+  const handleSave = async (item: Omit<PortfolioItem, 'id'>, id?: string) => {
+    try {
+      await savePortfolioItem(item, id);
+      toast({ title: `Portfolio item ${id ? 'updated' : 'created'}!` });
+      setIsFormOpen(false);
+      fetchItems(); // Refresh list
+    } catch(e) {
+      toast({ title: 'Error', description: 'Failed to save portfolio item.', variant: 'destructive'});
     }
-    persistItems(newItems);
   };
 
   return (
@@ -88,7 +88,13 @@ export default function PortfolioDataTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {items.map((item) => (
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={5} className="h-24 text-center">
+                  <Loader2 className="mx-auto h-8 w-8 animate-spin" />
+                </TableCell>
+              </TableRow>
+            ) : items.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>
                     {item.mediaType === 'image' ? (
@@ -127,7 +133,7 @@ export default function PortfolioDataTable() {
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => handleDelete(item.id)} className="bg-destructive hover:bg-destructive/90">
+                            <AlertDialogAction onClick={() => handleDelete(item.id as string)} className="bg-destructive hover:bg-destructive/90">
                                 Delete
                             </AlertDialogAction>
                         </AlertDialogFooter>

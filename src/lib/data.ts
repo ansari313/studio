@@ -1,8 +1,7 @@
 import type { PortfolioItem, ResumeData } from '@/lib/types';
 
-export const mockPortfolioItems: PortfolioItem[] = [
+export const mockPortfolioItems: Omit<PortfolioItem, 'id'>[] = [
   {
-    id: '1',
     title: 'Project Alpha',
     description: 'A cutting-edge web application built with Next.js and Tailwind CSS, focusing on a seamless user experience and high performance.',
     mediaUrl: 'https://placehold.co/600x400.png',
@@ -10,7 +9,6 @@ export const mockPortfolioItems: PortfolioItem[] = [
     tags: ['Web App', 'Next.js', 'React'],
   },
   {
-    id: '2',
     title: 'Mobile App Concept Video',
     description: 'A video walkthrough of a mobile application concept aimed at improving daily productivity. Designed in Figma and animated in After Effects.',
     mediaUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
@@ -18,7 +16,6 @@ export const mockPortfolioItems: PortfolioItem[] = [
     tags: ['UI/UX', 'Mobile App', 'Video'],
   },
   {
-    id: '3',
     title: 'E-commerce Platform',
     description: 'A full-stack e-commerce solution with a custom backend, payment gateway integration, and a responsive storefront.',
     mediaUrl: 'https://placehold.co/600x400.png',
@@ -26,7 +23,6 @@ export const mockPortfolioItems: PortfolioItem[] = [
     tags: ['E-commerce', 'Full-stack', 'Stripe'],
   },
   {
-    id: '4',
     title: 'Data Visualization Dashboard',
     description: 'An interactive dashboard for visualizing complex datasets, built with D3.js and React.',
     mediaUrl: 'https://placehold.co/600x400.png',
@@ -34,7 +30,6 @@ export const mockPortfolioItems: PortfolioItem[] = [
     tags: ['Data Viz', 'D3.js', 'React'],
   },
     {
-    id: '5',
     title: 'Cloud Infrastructure Setup',
     description: 'Architecture and deployment of a scalable cloud infrastructure on AWS for a high-traffic application.',
     mediaUrl: 'https://placehold.co/600x400.png',
@@ -42,14 +37,13 @@ export const mockPortfolioItems: PortfolioItem[] = [
     tags: ['Cloud', 'AWS', 'DevOps'],
   },
   {
-    id: '6',
     title: 'Brand Identity Design',
     description: 'Complete branding package for a new startup, including logo, color palette, and typography guidelines.',
     mediaUrl: 'https://placehold.co/600x400.png',
     mediaType: 'image',
     tags: ['Branding', 'Graphic Design', 'Logo'],
   },
-];
+].map((item, index) => ({ ...item, id: (index + 1).toString() }));
 
 
 export const mockResumeData: ResumeData = {

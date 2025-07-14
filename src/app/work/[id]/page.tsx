@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -10,8 +9,7 @@ import { Button } from '@/components/ui/button';
 import Header from '@/components/header';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import type { PortfolioItem } from '@/lib/types';
-import { PORTFOLIO_STORAGE_KEY } from '@/lib/types';
-import { mockPortfolioItems } from '@/lib/data';
+import { getPortfolioItem } from '@/actions/portfolio-actions';
 
 export default function PortfolioDetailPage() {
   const params = useParams();
@@ -21,18 +19,18 @@ export default function PortfolioDetailPage() {
 
   useEffect(() => {
     if (id) {
-        try {
-            const storedData = localStorage.getItem(PORTFOLIO_STORAGE_KEY);
-            const items: PortfolioItem[] = storedData ? JSON.parse(storedData) : mockPortfolioItems;
-            const foundItem = items.find((i) => i.id === id);
-            if (foundItem) {
-                setItem(foundItem);
-            }
-        } catch (e) {
-            console.error("Failed to load portfolio item", e);
-        } finally {
-            setLoading(false);
-        }
+      getPortfolioItem(id)
+        .then((data) => {
+          if (data) {
+            setItem(data);
+          }
+        })
+        .catch((e) => {
+          console.error("Failed to load portfolio item", e);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   }, [id]);
 

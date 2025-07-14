@@ -3,26 +3,22 @@
 import { useState, useMemo, useEffect } from 'react';
 import PortfolioItemCard from './portfolio-item-card';
 import { Input } from './ui/input';
-import { mockPortfolioItems } from '@/lib/data';
 import type { PortfolioItem } from '@/lib/types';
-import { PORTFOLIO_STORAGE_KEY } from '@/lib/types';
+import { getPortfolioItems } from '@/actions/portfolio-actions';
+import { Loader2 } from 'lucide-react';
 
 export default function PortfolioGrid() {
   const [searchTerm, setSearchTerm] = useState('');
   const [items, setItems] = useState<PortfolioItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      const storedData = localStorage.getItem(PORTFOLIO_STORAGE_KEY);
-      if (storedData) {
-        setItems(JSON.parse(storedData));
-      } else {
-        setItems(mockPortfolioItems);
-      }
-    } catch (e) {
-      console.error("Failed to load portfolio data, using mock data.", e);
-      setItems(mockPortfolioItems);
-    }
+    getPortfolioItems()
+      .then(setItems)
+      .catch((e) => {
+        console.error("Failed to load portfolio data", e);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const filteredItems = useMemo(() => {
@@ -47,7 +43,11 @@ export default function PortfolioGrid() {
           className="w-full"
         />
       </div>
-      {filteredItems.length > 0 ? (
+      {loading ? (
+        <div className="text-center py-16">
+            <Loader2 className="mx-auto h-8 w-8 animate-spin" />
+        </div>
+      ) : filteredItems.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredItems.map((item) => (
             <PortfolioItemCard key={item.id} item={item} />

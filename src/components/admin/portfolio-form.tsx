@@ -28,7 +28,7 @@ interface PortfolioFormProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   itemToEdit?: PortfolioItem | null;
-  onSave: (item: PortfolioItem) => void;
+  onSave: (item: Omit<PortfolioItem, 'id'>, id?: string) => void;
 }
 
 export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }: PortfolioFormProps) {
@@ -125,15 +125,7 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    const newItem = {
-        ...values,
-        id: itemToEdit ? itemToEdit.id : Date.now().toString(),
-    };
-    onSave(newItem);
-    toast({ title: `Portfolio item ${itemToEdit ? 'updated' : 'created'}!` });
-    setIsOpen(false);
+    await onSave(values, itemToEdit?.id);
     setIsSubmitting(false);
   }
 

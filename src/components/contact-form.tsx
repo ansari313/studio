@@ -17,7 +17,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
-import { CONTACT_SUBMISSIONS_STORAGE_KEY, type ContactSubmission } from '@/lib/types';
+import { saveContactSubmission } from '@/actions/contact-actions';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -47,21 +47,8 @@ export default function ContactForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 500));
-
     try {
-        const storedData = localStorage.getItem(CONTACT_SUBMISSIONS_STORAGE_KEY);
-        const submissions: ContactSubmission[] = storedData ? JSON.parse(storedData) : [];
-        
-        const newSubmission: ContactSubmission = {
-            id: Date.now().toString(),
-            submittedAt: new Date().toISOString(),
-            ...values,
-        };
-
-        const updatedSubmissions = [newSubmission, ...submissions];
-        localStorage.setItem(CONTACT_SUBMISSIONS_STORAGE_KEY, JSON.stringify(updatedSubmissions));
+        await saveContactSubmission(values);
         
         toast({
           title: 'Message Sent!',

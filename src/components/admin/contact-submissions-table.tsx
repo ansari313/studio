@@ -1,4 +1,3 @@
-// @/components/admin/contact-submissions-table.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -6,44 +5,49 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
-import { MoreHorizontal, Eye } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { MoreHorizontal, Eye, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { ContactSubmission } from '@/lib/types';
-import { CONTACT_SUBMISSIONS_STORAGE_KEY } from '@/lib/types';
 import { format } from 'date-fns';
+import { getContactSubmissions, deleteContactSubmission } from '@/actions/contact-actions';
 
 export default function ContactSubmissionsTable() {
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedSubmission, setSelectedSubmission] = useState<ContactSubmission | null>(null);
   const [isViewOpen, setIsViewOpen] = useState(false);
   const { toast } = useToast();
 
-  useEffect(() => {
+  const fetchSubmissions = async () => {
+    setLoading(true);
     try {
-      const storedData = localStorage.getItem(CONTACT_SUBMISSIONS_STORAGE_KEY);
-      if (storedData) {
-        setSubmissions(JSON.parse(storedData));
-      }
+      const subs = await getContactSubmissions();
+      setSubmissions(subs);
     } catch (e) {
       console.error("Failed to load contact submissions.", e);
       toast({
         title: 'Error loading messages',
-        description: 'Could not retrieve messages from local storage.',
+        description: 'Could not retrieve messages from the database.',
         variant: 'destructive'
       });
+    } finally {
+      setLoading(false);
     }
-  }, [toast]);
-
-  const persistSubmissions = (newSubmissions: ContactSubmission[]) => {
-    localStorage.setItem(CONTACT_SUBMISSIONS_STORAGE_KEY, JSON.stringify(newSubmissions));
-    setSubmissions(newSubmissions);
   };
+
+  useEffect(() => {
+    fetchSubmissions();
+  }, []);
   
-  const handleDelete = (id: string) => {
-    const newSubmissions = submissions.filter(item => item.id !== id);
-    persistSubmissions(newSubmissions);
-    toast({ title: 'Message deleted successfully.' });
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteContactSubmission(id);
+      toast({ title: 'Message deleted successfully.' });
+      fetchSubmissions(); // Refresh the list
+    } catch(e) {
+      toast({ title: 'Error', description: 'Failed to delete message.', variant: 'destructive'});
+    }
   };
 
   const handleView = (submission: ContactSubmission) => {
@@ -68,7 +72,13 @@ export default function ContactSubmissionsTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {submissions.length > 0 ? (
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={5} className="h-24 text-center">
+                  <Loader2 className="mx-auto h-8 w-8 animate-spin" />
+                </TableCell>
+              </TableRow>
+            ) : submissions.length > 0 ? (
               submissions.map((submission) => (
               <TableRow key={submission.id}>
                 <TableCell className="font-medium">{submission.name}</TableCell>
@@ -105,7 +115,7 @@ export default function ContactSubmissionsTable() {
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => handleDelete(submission.id)} className="bg-destructive hover:bg-destructive/90">
+                            <AlertDialogAction onClick={() => handleDelete(submission.id as string)} className="bg-destructive hover:bg-destructive/90">
                                 Delete
                             </AlertDialogAction>
                         </AlertDialogFooter>
