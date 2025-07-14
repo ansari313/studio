@@ -14,13 +14,13 @@ export default function Home() {
         <section id="hero" className="relative flex flex-col items-center justify-center h-screen min-h-[700px] text-center px-4 -mt-20">
           
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-6xl md:text-8xl font-serif leading-tight">
+            <h1 className="text-6xl md:text-8xl font-serif leading-tight animate-pop-in">
               Trust nothing, test everything.
             </h1>
-            <p className="mt-6 text-lg text-foreground/80 max-w-2xl mx-auto">
+            <p className="mt-6 text-lg text-foreground/80 max-w-2xl mx-auto animate-pop-in [animation-delay:200ms]">
               A true QA doesn&apos;t fear AI — we test it, break it, and make it better. If it can’t handle scrutiny, it’s not ready for release.
             </p>
-            <Button asChild size="lg" className="mt-10 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8 py-6 text-base">
+            <Button asChild size="lg" className="mt-10 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8 py-6 text-base animate-pop-in [animation-delay:400ms]">
                 <Link href="#contact">Let&apos;s Capture Together</Link>
             </Button>
           </div>
