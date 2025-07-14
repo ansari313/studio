@@ -54,6 +54,9 @@ export default function Home() {
         </section>
 
         <section className="py-16 bg-background overflow-hidden">
+            <div className="text-center mb-12">
+                <h2 className="text-4xl font-bold tracking-tight">Catch Me</h2>
+            </div>
             <div className="relative flex animate-marquee">
                 <div className="flex min-w-full shrink-0 items-center justify-around gap-12">
                 {repeatedIcons.map((item, index) => (
