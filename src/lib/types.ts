@@ -20,5 +20,14 @@ export interface ResumeData {
   imageUrl: string;
 }
 
+export interface ContactSubmission {
+  id: string;
+  name: string;
+  email: string;
+  message: string;
+  submittedAt: string;
+}
+
 // Key for storing portfolio items in localStorage
 export const PORTFOLIO_STORAGE_KEY = 'folioflow_portfolio_items';
+export const CONTACT_SUBMISSIONS_STORAGE_KEY = 'folioflow_contact_submissions';

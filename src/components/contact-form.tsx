@@ -17,6 +17,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import { CONTACT_SUBMISSIONS_STORAGE_KEY, type ContactSubmission } from '@/lib/types';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -45,15 +46,39 @@ export default function ContactForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
+    
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    console.log(values);
-    toast({
-      title: 'Message Sent!',
-      description: "Thanks for reaching out. I'll get back to you soon.",
-    });
-    form.reset();
-    setIsSubmitting(false);
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    try {
+        const storedData = localStorage.getItem(CONTACT_SUBMISSIONS_STORAGE_KEY);
+        const submissions: ContactSubmission[] = storedData ? JSON.parse(storedData) : [];
+        
+        const newSubmission: ContactSubmission = {
+            id: Date.now().toString(),
+            submittedAt: new Date().toISOString(),
+            ...values,
+        };
+
+        const updatedSubmissions = [newSubmission, ...submissions];
+        localStorage.setItem(CONTACT_SUBMISSIONS_STORAGE_KEY, JSON.stringify(updatedSubmissions));
+        
+        toast({
+          title: 'Message Sent!',
+          description: "Thanks for reaching out. I'll get back to you soon.",
+        });
+        form.reset();
+
+    } catch (e) {
+        console.error("Failed to save submission", e);
+        toast({
+            title: 'Submission Failed',
+            description: 'Could not save your message. Please try again.',
+            variant: 'destructive',
+        });
+    } finally {
+        setIsSubmitting(false);
+    }
   }
 
   return (

@@ -1,4 +1,5 @@
 import AdminLayout from '@/components/admin/admin-layout';
+import ContactSubmissionsTable from '@/components/admin/contact-submissions-table';
 import PortfolioDataTable from '@/components/admin/portfolio-data-table';
 import ResumeManager from '@/components/admin/resume-manager';
 import { Button } from '@/components/ui/button';
@@ -19,15 +20,19 @@ export default function AdminDashboardPage() {
                 </header>
                 <main className="flex-1 p-4 md:p-8">
                     <Tabs defaultValue="portfolio">
-                        <TabsList className="grid w-full grid-cols-2 max-w-md">
+                        <TabsList className="grid w-full grid-cols-3 max-w-lg">
                             <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
                             <TabsTrigger value="resume">Resume</TabsTrigger>
+                            <TabsTrigger value="messages">Messages</TabsTrigger>
                         </TabsList>
                         <TabsContent value="portfolio">
                             <PortfolioDataTable />
                         </TabsContent>
                         <TabsContent value="resume">
                             <ResumeManager />
+                        </TabsContent>
+                         <TabsContent value="messages">
+                            <ContactSubmissionsTable />
                         </TabsContent>
                     </Tabs>
                 </main>
