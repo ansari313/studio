@@ -40,25 +40,27 @@ export default function Home() {
       <Header />
       <main className="flex-1 pt-20">
         <section id="hero" className="relative flex flex-col items-center justify-center h-screen min-h-[700px] text-center px-4 -mt-20">
-          
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-6xl md:text-8xl font-serif leading-tight animate-pop-in">
-              Trust nothing, test everything.
-            </h1>
-            <p className="mt-6 text-lg text-foreground/80 max-w-2xl mx-auto animate-pop-in [animation-delay:200ms]">
-              A true QA doesn&apos;t fear AI — we test it, break it, and make it better. If it can’t handle scrutiny, it’s not ready for release.
-            </p>
-            <Button asChild size="lg" className="mt-10 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8 py-6 text-base animate-pop-in [animation-delay:400ms]">
-                <Link href="#contact">Let&apos;s Capture Together</Link>
-            </Button>
+          <div className="container">
+            <div className="max-w-4xl mx-auto">
+              <h1 className="text-6xl md:text-8xl font-serif leading-tight animate-pop-in">
+                Trust nothing, test everything.
+              </h1>
+              <p className="mt-6 text-lg text-foreground/80 max-w-2xl mx-auto animate-pop-in [animation-delay:200ms]">
+                A true QA doesn&apos;t fear AI — we test it, break it, and make it better. If it can’t handle scrutiny, it’s not ready for release.
+              </p>
+              <Button asChild size="lg" className="mt-10 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8 py-6 text-base animate-pop-in [animation-delay:400ms]">
+                  <Link href="#contact">Let&apos;s Capture Together</Link>
+              </Button>
+            </div>
           </div>
         </section>
 
-        <section id="work" className="bg-secondary/20 animate-slide-in-up">
+        <section id="work" className="py-24 bg-secondary/20 animate-slide-in-up">
           <PortfolioGrid />
         </section>
 
         <section className="py-24 bg-background">
+          <div className="container">
             <div className="text-center mb-12">
                 <h2 className="text-4xl font-bold tracking-tight">Catch Me</h2>
             </div>
@@ -69,6 +71,7 @@ export default function Home() {
                     </a>
                 ))}
             </div>
+          </div>
         </section>
 
         <ResumeSection />
