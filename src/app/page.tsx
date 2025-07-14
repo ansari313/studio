@@ -58,7 +58,7 @@ export default function Home() {
           <PortfolioGrid />
         </section>
 
-        <section className="py-16 bg-background">
+        <section className="py-24 bg-background">
             <div className="text-center mb-12">
                 <h2 className="text-4xl font-bold tracking-tight">Catch Me</h2>
             </div>
