@@ -50,21 +50,6 @@ export default function ResumeSection() {
                 <div className="max-w-4xl mx-auto">
                     <Card>
                         <CardContent className="p-8">
-                            <div className="flex items-start gap-6 mb-8">
-                                <div className="relative w-24 h-24 rounded-full overflow-hidden flex-shrink-0 border-2 border-primary/20">
-                                    <Image
-                                        src={resume.imageUrl}
-                                        alt="Umair Sarwar Ansari"
-                                        fill
-                                        className="object-cover"
-                                        data-ai-hint="professional headshot"
-                                    />
-                                </div>
-                                <div>
-                                    <h3 className="text-2xl font-semibold">{resume.cardTitle}</h3>
-                                    <p className="text-muted-foreground">{resume.cardSubtitle}</p>
-                                </div>
-                            </div>
                             <ScrollArea className="h-[400px] pr-6">
                               <div className="space-y-6">
                                   <div>
