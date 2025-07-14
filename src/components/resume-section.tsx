@@ -41,12 +41,12 @@ export default function ResumeSection() {
                 </div>
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
                     <div className="md:col-span-1 flex justify-center">
-                        <div className="relative w-64 h-64 rounded-full overflow-hidden border-4 border-primary/20 shadow-lg">
+                        <div className="relative w-64 h-64 rounded-full overflow-hidden border-4 border-primary/20 shadow-lg bg-secondary">
                            <Image
                                 src={resume.imageUrl}
                                 alt="User image"
                                 fill
-                                className="object-cover"
+                                className="object-contain"
                                 data-ai-hint="portrait person"
                            />
                         </div>
