@@ -15,6 +15,7 @@ interface PortfolioDetailPageProps {
 export default async function PortfolioDetailPage({ params }: PortfolioDetailPageProps) {
   const { id } = params;
   const item = await getPortfolioItem(id);
+  const currentYear = new Date().getFullYear();
 
   if (!item) {
     notFound();
@@ -79,10 +80,9 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
         </main>
         <footer className="py-6 border-t">
             <div className="container text-center text-sm text-muted-foreground">
-                © {new Date().getFullYear()} FolioFlow. All rights reserved.
+                © {currentYear} FolioFlow. All rights reserved.
             </div>
       </footer>
     </div>
   );
 }
-

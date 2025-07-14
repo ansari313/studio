@@ -35,6 +35,8 @@ const socialIcons = [
 ];
 
 export default function Home() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <Header />
@@ -56,7 +58,9 @@ export default function Home() {
         </section>
 
         <section id="work" className="py-16 bg-secondary/20 animate-slide-in-up">
-          <PortfolioGrid />
+           <div className="container">
+              <PortfolioGrid />
+           </div>
         </section>
 
         <section className="py-16 bg-background">
@@ -88,11 +92,9 @@ export default function Home() {
       </main>
       <footer className="py-6 border-t border-white/10 bg-background">
         <div className="container text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} FolioFlow. All rights reserved.
+            © {currentYear} FolioFlow. All rights reserved.
         </div>
       </footer>
     </div>
   );
 }
-
-    
