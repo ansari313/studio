@@ -26,7 +26,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="work" className="bg-secondary/20">
+        <section id="work" className="bg-secondary/20 animate-slide-in-up">
           <PortfolioGrid />
         </section>
 
