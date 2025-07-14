@@ -1,70 +1,23 @@
-'use client';
 
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/header';
-import { Loader2, ArrowLeft } from 'lucide-react';
-import type { PortfolioItem } from '@/lib/types';
+import { ArrowLeft } from 'lucide-react';
 import { getPortfolioItem } from '@/actions/portfolio-actions';
 
-export default function PortfolioDetailPage() {
-  const params = useParams();
-  const id = params.id as string;
-  const [item, setItem] = useState<PortfolioItem | null>(null);
-  const [loading, setLoading] = useState(true);
+interface PortfolioDetailPageProps {
+    params: { id: string };
+}
 
-  useEffect(() => {
-    if (id) {
-      getPortfolioItem(id)
-        .then((data) => {
-          if (data) {
-            setItem(data);
-          }
-        })
-        .catch((e) => {
-          console.error("Failed to load portfolio item", e);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  }, [id]);
-
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-accent" />
-      </div>
-    );
-  }
+export default async function PortfolioDetailPage({ params }: PortfolioDetailPageProps) {
+  const { id } = params;
+  const item = await getPortfolioItem(id);
 
   if (!item) {
-    return (
-        <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-1 flex items-center justify-center text-center p-4">
-                <div className="container">
-                    <h1 className="text-4xl font-bold mb-4">Project Not Found</h1>
-                    <p className="text-muted-foreground mb-8">The project you are looking for does not exist.</p>
-                    <Button asChild>
-                        <Link href="/#work">
-                            <ArrowLeft className="mr-2" />
-                            Back to My Work
-                        </Link>
-                    </Button>
-                </div>
-            </main>
-            <footer className="py-6 border-t">
-                <div className="container text-center text-sm text-muted-foreground">
-                    © {new Date().getFullYear()} FolioFlow. All rights reserved.
-                </div>
-            </footer>
-        </div>
-    );
+    notFound();
   }
 
   return (
@@ -132,3 +85,4 @@ export default function PortfolioDetailPage() {
     </div>
   );
 }
+
