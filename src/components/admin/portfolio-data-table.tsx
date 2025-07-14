@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { MoreHorizontal, PlusCircle, Video, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { MoreHorizontal, PlusCircle, Video, Image as ImageIcon, Loader2, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import type { PortfolioItem } from '@/lib/types';
 import PortfolioForm from './portfolio-form';
@@ -120,7 +120,10 @@ export default function PortfolioDataTable() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => handleEdit(item)}>Edit</DropdownMenuItem>
                         <AlertDialogTrigger asChild>
-                           <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10">Delete</DropdownMenuItem>
+                           <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10">
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete
+                           </DropdownMenuItem>
                         </AlertDialogTrigger>
                       </DropdownMenuContent>
                     </DropdownMenu>

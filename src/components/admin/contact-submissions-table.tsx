@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { MoreHorizontal, Eye, Loader2 } from 'lucide-react';
+import { MoreHorizontal, Eye, Loader2, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { ContactSubmission } from '@/lib/types';
 import { format } from 'date-fns';
@@ -102,7 +102,10 @@ export default function ContactSubmissionsTable() {
                             View
                         </DropdownMenuItem>
                         <AlertDialogTrigger asChild>
-                           <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10">Delete</DropdownMenuItem>
+                           <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10">
+                             <Trash2 className="mr-2 h-4 w-4" />
+                             Delete
+                           </DropdownMenuItem>
                         </AlertDialogTrigger>
                       </DropdownMenuContent>
                     </DropdownMenu>
