@@ -21,6 +21,7 @@ const formSchema = z.object({
   description: z.string().min(10, 'Description must be at least 10 characters.'),
   mediaType: z.enum(['image', 'video']),
   mediaUrl: z.string().min(1, 'Please provide a media URL or upload a file.'),
+  projectUrl: z.string().url('Please enter a valid URL.').optional().or(z.literal('')),
   tags: z.array(z.string()).min(1, 'Please add at least one tag.'),
 });
 
@@ -44,6 +45,7 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
       description: '',
       mediaType: 'image',
       mediaUrl: '',
+      projectUrl: '',
       tags: [],
     },
   });
@@ -58,10 +60,11 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
           description: itemToEdit.description,
           mediaType: itemToEdit.mediaType,
           mediaUrl: itemToEdit.mediaUrl,
+          projectUrl: itemToEdit.projectUrl,
           tags: itemToEdit.tags,
         });
       } else {
-        form.reset({ title: '', description: '', mediaType: 'image', mediaUrl: 'https://placehold.co/600x400.png', tags: [] });
+        form.reset({ title: '', description: '', mediaType: 'image', mediaUrl: 'https://placehold.co/600x400.png', projectUrl: '', tags: [] });
       }
     }
   }, [itemToEdit, form, isOpen]);
@@ -186,6 +189,14 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
                     />
                   )}
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+            
+            <FormField control={form.control} name="projectUrl" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Project Link</FormLabel>
+                <FormControl><Input placeholder="https://your-project-live-url.com" {...field} /></FormControl>
                 <FormMessage />
               </FormItem>
             )} />

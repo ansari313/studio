@@ -6,6 +6,7 @@ export interface PortfolioItem {
   mediaUrl: string;
   mediaType: 'image' | 'video';
   tags: string[];
+  projectUrl?: string;
 }
 
 export interface ResumeData {

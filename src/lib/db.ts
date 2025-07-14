@@ -13,13 +13,12 @@ const createTables = () => {
       mediaUrl TEXT NOT NULL,
       mediaType TEXT NOT NULL CHECK(mediaType IN ('image', 'video')),
       tags TEXT NOT NULL,
+      projectUrl TEXT,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS resume (
       id INTEGER PRIMARY KEY CHECK (id = 1),
-      sectionTitle TEXT NOT NULL,
-      sectionDescription TEXT NOT NULL,
       cardTitle TEXT NOT NULL,
       cardSubtitle TEXT NOT NULL,
       summary TEXT NOT NULL,
@@ -37,15 +36,24 @@ const createTables = () => {
       submittedAt TEXT NOT NULL
     );
   `);
+
+  // Add projectUrl column if it doesn't exist (for existing databases)
+  try {
+    db.exec('ALTER TABLE portfolio_items ADD COLUMN projectUrl TEXT');
+  } catch (e: any) {
+    if (!e.message.includes('duplicate column name')) {
+        console.error("Failed to alter table:", e);
+    }
+  }
 };
 
 const seedData = () => {
     // Seed portfolio items
     const countPortfolio = db.prepare('SELECT COUNT(*) as count FROM portfolio_items').get() as { count: number };
     if (countPortfolio.count === 0) {
-        const insert = db.prepare('INSERT INTO portfolio_items (id, title, description, mediaUrl, mediaType, tags) VALUES (?, ?, ?, ?, ?, ?)');
+        const insert = db.prepare('INSERT INTO portfolio_items (id, title, description, mediaUrl, mediaType, tags, projectUrl) VALUES (?, ?, ?, ?, ?, ?, ?)');
         const transaction = db.transaction((items) => {
-            for (const item of items) insert.run(item.id, item.title, item.description, item.mediaUrl, item.mediaType, JSON.stringify(item.tags));
+            for (const item of items) insert.run(item.id, item.title, item.description, item.mediaUrl, item.mediaType, JSON.stringify(item.tags), item.projectUrl);
         });
         transaction(mockPortfolioItems);
         console.log('Database seeded with mock portfolio items.');
@@ -54,9 +62,9 @@ const seedData = () => {
     // Seed resume data
     const countResume = db.prepare('SELECT COUNT(*) as count FROM resume').get() as { count: number };
     if (countResume.count === 0) {
-        const { sectionTitle, sectionDescription, cardTitle, cardSubtitle, summary, skills, experience, cvUrl, imageUrl } = mockResumeData;
-        const insert = db.prepare('INSERT INTO resume (id, sectionTitle, sectionDescription, cardTitle, cardSubtitle, summary, skills, experience, cvUrl, imageUrl) VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-        insert.run(sectionTitle, sectionDescription, cardTitle, cardSubtitle, summary, JSON.stringify(skills), experience, cvUrl, imageUrl);
+        const { cardTitle, cardSubtitle, summary, skills, experience, cvUrl, imageUrl } = mockResumeData;
+        const insert = db.prepare('INSERT INTO resume (id, cardTitle, cardSubtitle, summary, skills, experience, cvUrl, imageUrl) VALUES (1, ?, ?, ?, ?, ?, ?, ?)');
+        insert.run(cardTitle, cardSubtitle, summary, JSON.stringify(skills), experience, cvUrl, imageUrl);
         console.log('Database seeded with mock resume data.');
     }
 }

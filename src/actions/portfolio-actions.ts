@@ -22,18 +22,18 @@ export async function getPortfolioItem(id: string): Promise<PortfolioItem | null
 }
 
 export async function savePortfolioItem(itemData: Omit<PortfolioItem, 'id'>, id?: string) {
-    const { title, description, mediaUrl, mediaType, tags } = itemData;
+    const { title, description, mediaUrl, mediaType, tags, projectUrl } = itemData;
     const serializedTags = JSON.stringify(tags);
     
     if (id) {
         // Update existing item
-        const stmt = db.prepare('UPDATE portfolio_items SET title = ?, description = ?, mediaUrl = ?, mediaType = ?, tags = ? WHERE id = ?');
-        stmt.run(title, description, mediaUrl, mediaType, serializedTags, id);
+        const stmt = db.prepare('UPDATE portfolio_items SET title = ?, description = ?, mediaUrl = ?, mediaType = ?, tags = ?, projectUrl = ? WHERE id = ?');
+        stmt.run(title, description, mediaUrl, mediaType, serializedTags, projectUrl, id);
     } else {
         // Create new item
         const newId = Date.now().toString();
-        const stmt = db.prepare('INSERT INTO portfolio_items (id, title, description, mediaUrl, mediaType, tags) VALUES (?, ?, ?, ?, ?, ?)');
-        stmt.run(newId, title, description, mediaUrl, mediaType, serializedTags);
+        const stmt = db.prepare('INSERT INTO portfolio_items (id, title, description, mediaUrl, mediaType, tags, projectUrl) VALUES (?, ?, ?, ?, ?, ?, ?)');
+        stmt.run(newId, title, description, mediaUrl, mediaType, serializedTags, projectUrl);
     }
 
     revalidatePath('/');
