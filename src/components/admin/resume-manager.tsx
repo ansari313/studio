@@ -1,3 +1,4 @@
+
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -185,7 +186,7 @@ export default function ResumeManager() {
               <FormItem>
                 <FormLabel>Key Skills</FormLabel>
                 <FormControl>
-                  <>
+                  <div>
                     <div className="flex flex-wrap gap-2 mb-2 p-2 border rounded-md min-h-[40px]">
                         {form.watch('skills').map((skill) => (
                             <Badge key={skill} variant="secondary" className="pr-1">
@@ -203,7 +204,7 @@ export default function ResumeManager() {
                       onChange={(e) => setSkillInput(e.target.value)}
                       onKeyDown={handleSkillKeyDown}
                     />
-                  </>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
