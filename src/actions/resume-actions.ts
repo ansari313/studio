@@ -82,15 +82,15 @@ export async function updateExperienceOrder(experience: Pick<ExperienceItem, 'id
 
 // Education Actions
 export async function saveEducationItem(item: Omit<EducationItem, 'id'>, id?: string) {
-    const { institution, degree, fieldOfStudy, startDate, endDate, description } = item;
+    const { logoUrl, institution, degree, fieldOfStudy, startDate, endDate, description } = item;
 
     if (id) {
-        const stmt = db.prepare('UPDATE resume_education SET institution = ?, degree = ?, fieldOfStudy = ?, startDate = ?, endDate = ?, description = ? WHERE id = ?');
-        stmt.run(institution, degree, fieldOfStudy, startDate, endDate, description, id);
+        const stmt = db.prepare('UPDATE resume_education SET logoUrl = ?, institution = ?, degree = ?, fieldOfStudy = ?, startDate = ?, endDate = ?, description = ? WHERE id = ?');
+        stmt.run(logoUrl, institution, degree, fieldOfStudy, startDate, endDate, description, id);
     } else {
         const newId = Date.now().toString();
-        const stmt = db.prepare('INSERT INTO resume_education (id, institution, degree, fieldOfStudy, startDate, endDate, description) VALUES (?, ?, ?, ?, ?, ?, ?)');
-        stmt.run(newId, institution, degree, fieldOfStudy, startDate, endDate, description);
+        const stmt = db.prepare('INSERT INTO resume_education (id, logoUrl, institution, degree, fieldOfStudy, startDate, endDate, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+        stmt.run(newId, logoUrl, institution, degree, fieldOfStudy, startDate, endDate, description);
     }
 
     revalidatePath('/');

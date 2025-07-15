@@ -21,6 +21,7 @@ const formSchema = z.object({
   startDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{4}$/, 'Date must be in MM/YYYY format.'),
   endDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{4}$/, 'Date must be in MM/YYYY format.'),
   description: z.string().optional(),
+  logoUrl: z.string().min(1, 'Logo is required.'),
 });
 
 interface EducationFormProps {
@@ -42,6 +43,7 @@ export default function EducationForm({ isOpen, setIsOpen, itemToEdit, onSave }:
       startDate: '',
       endDate: '',
       description: '',
+      logoUrl: '',
     },
   });
   
@@ -50,10 +52,21 @@ export default function EducationForm({ isOpen, setIsOpen, itemToEdit, onSave }:
       if (itemToEdit) {
         form.reset(itemToEdit);
       } else {
-        form.reset({ institution: '', degree: '', fieldOfStudy: '', startDate: '', endDate: '', description: '' });
+        form.reset({ institution: '', degree: '', fieldOfStudy: '', startDate: '', endDate: '', description: '', logoUrl: 'https://placehold.co/50x50.png' });
       }
     }
   }, [itemToEdit, form, isOpen]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        form.setValue('logoUrl', reader.result as string, { shouldValidate: true });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
@@ -89,6 +102,13 @@ export default function EducationForm({ isOpen, setIsOpen, itemToEdit, onSave }:
                             <FormItem><FormLabel>End Date</FormLabel><FormControl><Input placeholder="MM/YYYY" {...field} /></FormControl><FormMessage /></FormItem>
                         )} />
                     </div>
+                     <FormField control={form.control} name="logoUrl" render={() => (
+                        <FormItem>
+                            <FormLabel>Institution Logo</FormLabel>
+                            <FormControl><Input type="file" accept="image/*" onChange={handleFileChange} /></FormControl>
+                            <FormMessage />
+                        </FormItem>
+                     )} />
                     <FormField control={form.control} name="description" render={({ field }) => (
                         <FormItem>
                             <FormLabel>Description (Optional)</FormLabel>

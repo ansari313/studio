@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Download, Loader2, Award, BookOpen } from 'lucide-react';
+import { Download, Loader2, Award, Briefcase } from 'lucide-react';
 import type { ResumeData } from '@/lib/types';
 import { getResumeData } from '@/actions/resume-actions';
 import { Separator } from './ui/separator';
@@ -74,12 +74,11 @@ export default function ResumeSection() {
                                   
                                   {resume.experience.length > 0 && (
                                     <div>
-                                        <h3 className="font-bold text-2xl mb-6">Work Experience</h3>
+                                        <h3 className="font-bold text-2xl mb-6 flex items-center gap-2"><Briefcase className="h-6 w-6 text-primary" />Work Experience</h3>
                                         <div className="relative pl-6 space-y-10 border-l-2 border-border/50">
                                             {resume.experience.map((item, index) => (
                                                 <div key={item.id} className="relative">
-                                                    <div className={`absolute w-3 h-3 bg-primary rounded-full -left-[31px] top-1.5 ${index !== 0 ? 'ring-4 ring-background' : ''}`}></div>
-                                                    {index === 0 && <div className="absolute w-3 h-3 bg-primary rounded-full -left-[7px] top-1.5 ring-4 ring-background"></div>}
+                                                    <div className="absolute w-3 h-3 bg-primary rounded-full -left-[7px] top-1.5 ring-4 ring-background"></div>
                                                     <div className="flex items-start gap-4">
                                                         <Image src={item.logoUrl} alt={`${item.companyName} logo`} width={50} height={50} className="rounded-md border bg-secondary object-contain" data-ai-hint="logo company" />
                                                         <div className='flex-1'>
@@ -97,14 +96,23 @@ export default function ResumeSection() {
 
                                   {resume.education.length > 0 && (
                                     <div>
-                                        <h3 className="font-bold text-2xl mb-6 flex items-center gap-2"><BookOpen className="h-6 w-6 text-primary" />Education</h3>
-                                        <div className="space-y-6">
+                                        <h3 className="font-bold text-2xl mb-6 flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><path d="M12 7v6l4 2"/></svg>
+                                            Education
+                                        </h3>
+                                        <div className="relative pl-6 space-y-10 border-l-2 border-border/50">
                                             {resume.education.map((item) => (
-                                                <div key={item.id}>
-                                                    <p className="text-sm text-muted-foreground">{item.startDate} - {item.endDate}</p>
-                                                    <h4 className="font-semibold text-lg">{item.degree} in {item.fieldOfStudy}</h4>
-                                                    <p className="font-medium text-primary">{item.institution}</p>
-                                                    {item.description && <p className="mt-2 text-muted-foreground text-sm whitespace-pre-wrap">{item.description}</p>}
+                                                <div key={item.id} className="relative">
+                                                     <div className="absolute w-3 h-3 bg-primary rounded-full -left-[7px] top-1.5 ring-4 ring-background"></div>
+                                                    <div className="flex items-start gap-4">
+                                                        <Image src={item.logoUrl} alt={`${item.institution} logo`} width={50} height={50} className="rounded-md border bg-secondary object-contain" data-ai-hint="logo institution" />
+                                                        <div className='flex-1'>
+                                                            <p className="text-sm text-muted-foreground">{item.startDate} - {item.endDate}</p>
+                                                            <h4 className="font-semibold text-lg">{item.degree} in {item.fieldOfStudy}</h4>
+                                                            <p className="font-medium text-primary">{item.institution}</p>
+                                                            {item.description && <p className="mt-2 text-muted-foreground text-sm whitespace-pre-wrap">{item.description}</p>}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>

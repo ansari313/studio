@@ -1,3 +1,4 @@
+
 import Database from 'better-sqlite3';
 import type { EducationItem, ExperienceItem, CertificationItem } from './types';
 
@@ -40,6 +41,7 @@ const createTables = () => {
 
     CREATE TABLE IF NOT EXISTS resume_education (
       id TEXT PRIMARY KEY,
+      logoUrl TEXT NOT NULL,
       institution TEXT NOT NULL,
       degree TEXT NOT NULL,
       fieldOfStudy TEXT NOT NULL,
@@ -73,6 +75,19 @@ const createTables = () => {
         console.error("Failed to alter table:", e);
     }
   }
+
+  // Add logoUrl column to resume_education if it doesn't exist
+  try {
+    const tableInfo = db.pragma('table_info(resume_education)');
+    if (!tableInfo.some(col => col.name === 'logoUrl')) {
+        db.exec("ALTER TABLE resume_education ADD COLUMN logoUrl TEXT NOT NULL DEFAULT 'https://placehold.co/50x50.png'");
+    }
+  } catch (e: any) {
+    if (!e.message.includes('duplicate column name')) {
+        console.error("Failed to alter education table:", e);
+    }
+  }
+
 
   // Drop old experience column from resume table if it exists
   try {

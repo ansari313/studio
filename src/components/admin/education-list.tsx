@@ -16,6 +16,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import Image from 'next/image';
 
 interface EducationListProps {
   items: EducationItem[];
@@ -36,6 +37,14 @@ export default function EducationList({ items, onEdit, onDelete }: EducationList
     <div className="space-y-4">
       {items.map((item) => (
         <Card key={item.id} className="p-4 flex items-start gap-4">
+          <Image
+            src={item.logoUrl}
+            alt={`${item.institution} logo`}
+            width={50}
+            height={50}
+            className="rounded-md border bg-secondary object-contain"
+            data-ai-hint="logo institution"
+          />
           <div className="flex-1">
             <h4 className="font-semibold">{item.degree} in {item.fieldOfStudy}</h4>
             <CardDescription>{item.institution}</CardDescription>

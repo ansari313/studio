@@ -22,6 +22,7 @@ export interface ExperienceItem {
 
 export interface EducationItem {
   id: string;
+  logoUrl: string;
   institution: string;
   degree: string;
   fieldOfStudy: string;
