@@ -75,13 +75,13 @@ export default function ExperienceForm({ isOpen, setIsOpen, itemToEdit, onSave }
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="sm:max-w-[625px] max-h-[90vh] flex flex-col p-0">
-        <DialogHeader className="p-6 pb-4 border-b">
+        <DialogHeader className="p-6 pb-4 border-b flex-shrink-0">
           <DialogTitle>{itemToEdit ? 'Edit' : 'Add'} Experience</DialogTitle>
         </DialogHeader>
-        <div className="flex-1 min-h-0 overflow-hidden">
-            <ScrollArea className="h-full">
+        <div className="flex-1 min-h-0 overflow-y-auto">
+          <ScrollArea className="h-full">
             <div className="px-6 py-4">
-                <Form {...form}>
+              <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <FormField control={form.control} name="companyName" render={({ field }) => (
                         <FormItem><FormLabel>Company Name</FormLabel><FormControl><Input placeholder="Acme Inc." {...field} /></FormControl><FormMessage /></FormItem>
@@ -112,11 +112,11 @@ export default function ExperienceForm({ isOpen, setIsOpen, itemToEdit, onSave }
                         </FormItem>
                     )} />
                 </form>
-                </Form>
+              </Form>
             </div>
-            </ScrollArea>
+          </ScrollArea>
         </div>
-        <DialogFooter className="p-6 pt-4 border-t">
+        <DialogFooter className="p-6 pt-4 border-t flex-shrink-0">
             <DialogClose asChild><Button type="button" variant="ghost">Cancel</Button></DialogClose>
             <Button type="submit" disabled={isSubmitting} className="bg-accent hover:bg-accent/90" onClick={form.handleSubmit(onSubmit)}>
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Save
