@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -31,7 +32,7 @@ export default function PortfolioGrid() {
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="text-center mb-12">
-        <h2 className="text-4xl font-bold tracking-tight">My Work</h2>
+        <h2 className="text-3xl md:text-4xl font-bold tracking-tight">My Work</h2>
         <p className="text-muted-foreground mt-2">A selection of my recent projects.</p>
       </div>
       <div className="mb-8 max-w-sm mx-auto">

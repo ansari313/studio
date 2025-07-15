@@ -41,8 +41,11 @@ export default function PortfolioDetailPage({ params }: PortfolioDetailPageProps
     };
     
     fetchItem();
-    setCurrentYear(new Date().getFullYear());
   }, [id]);
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
 
   if (loading) {
     return (
@@ -76,7 +79,7 @@ export default function PortfolioDetailPage({ params }: PortfolioDetailPageProps
 
                 <article className="max-w-4xl mx-auto space-y-8 px-4">
                     <header className="space-y-4">
-                        <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">{item.title}</h1>
+                        <h1 className="text-3xl md:text-5xl font-bold tracking-tight leading-tight">{item.title}</h1>
                          <div className="flex flex-wrap items-center gap-2">
                             {item.tags.map((tag) => (
                                 <Badge key={tag} variant="secondary" className="px-3 py-1 text-sm">
@@ -110,7 +113,7 @@ export default function PortfolioDetailPage({ params }: PortfolioDetailPageProps
                     </div>
 
                     <div 
-                      className="prose prose-invert max-w-none text-muted-foreground text-lg whitespace-pre-wrap"
+                      className="prose prose-invert max-w-none text-muted-foreground text-base md:text-lg whitespace-pre-wrap"
                       dangerouslySetInnerHTML={{ __html: item.description }} 
                     />
                     

@@ -32,10 +32,10 @@ export default function ResumeSection() {
     }
 
     return (
-        <section id="resume" className="py-24">
+        <section id="resume" className="py-16 md:py-24">
             <div className="container">
                 <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold tracking-tight">My Resume</h2>
+                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight">My Resume</h2>
                     <p className="text-muted-foreground mt-2">A brief overview of my skills and experience.</p>
                 </div>
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
@@ -51,7 +51,7 @@ export default function ResumeSection() {
                         </div>
                         <div>
                             <h4 className="font-semibold text-xl mb-4 text-center">Key Skills</h4>
-                            <ul className="list-disc list-inside text-muted-foreground grid grid-cols-2 gap-x-6 gap-y-2">
+                            <ul className="list-disc list-inside text-muted-foreground grid grid-cols-2 gap-x-4 gap-y-2 text-sm sm:text-base">
                                 {resume.skills.map(skill => <li key={skill}>{skill}</li>)}
                             </ul>
                         </div>
@@ -64,16 +64,16 @@ export default function ResumeSection() {
                     </div>
                     <div className="md:col-span-2">
                         <Card>
-                            <CardContent className="p-8">
+                            <CardContent className="p-6 md:p-8">
                               <div className="space-y-8">
                                   <div>
-                                      <h3 className="font-bold text-2xl mb-4">Summary</h3>
-                                      <p className="text-muted-foreground">{resume.summary}</p>
+                                      <h3 className="font-bold text-xl md:text-2xl mb-4">Summary</h3>
+                                      <p className="text-muted-foreground text-sm md:text-base">{resume.summary}</p>
                                   </div>
                                   
                                   {resume.experience.length > 0 && (
                                     <div>
-                                        <h3 className="font-bold text-2xl mb-6 flex items-center gap-2"><Briefcase className="h-6 w-6 text-primary" />Work Experience</h3>
+                                        <h3 className="font-bold text-xl md:text-2xl mb-6 flex items-center gap-2"><Briefcase className="h-6 w-6 text-primary" />Work Experience</h3>
                                         <div className="relative pl-6 space-y-10 border-l-2 border-border/50">
                                             {resume.experience.map((item) => (
                                                 <div key={item.id} className="relative">
@@ -82,7 +82,7 @@ export default function ResumeSection() {
                                                         <Image src={item.logoUrl} alt={`${item.companyName} logo`} width={50} height={50} className="rounded-md border bg-secondary object-contain" data-ai-hint="logo company" />
                                                         <div className='flex-1'>
                                                             <p className="text-sm text-muted-foreground">{item.startDate} - {item.endDate}</p>
-                                                            <h4 className="font-semibold text-lg">{item.position}</h4>
+                                                            <h4 className="font-semibold text-base md:text-lg">{item.position}</h4>
                                                             <p className="font-medium text-primary">{item.companyName}</p>
                                                             <p className="mt-2 text-muted-foreground text-sm whitespace-pre-wrap">{item.description}</p>
                                                         </div>
@@ -95,7 +95,7 @@ export default function ResumeSection() {
 
                                   {resume.education.length > 0 && (
                                     <div>
-                                        <h3 className="font-bold text-2xl mb-6 flex items-center gap-2">
+                                        <h3 className="font-bold text-xl md:text-2xl mb-6 flex items-center gap-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><path d="M12 7v6l4 2"/></svg>
                                             Education
                                         </h3>
@@ -107,7 +107,7 @@ export default function ResumeSection() {
                                                         <Image src={item.logoUrl} alt={`${item.institution} logo`} width={50} height={50} className="rounded-md border bg-secondary object-contain" data-ai-hint="logo institution" />
                                                         <div className='flex-1'>
                                                             <p className="text-sm text-muted-foreground">{item.startDate} - {item.endDate}</p>
-                                                            <h4 className="font-semibold text-lg">{item.degree} in {item.fieldOfStudy}</h4>
+                                                            <h4 className="font-semibold text-base md:text-lg">{item.degree} in {item.fieldOfStudy}</h4>
                                                             <p className="font-medium text-primary">{item.institution}</p>
                                                             {item.description && <p className="mt-2 text-muted-foreground text-sm whitespace-pre-wrap">{item.description}</p>}
                                                         </div>
@@ -120,7 +120,7 @@ export default function ResumeSection() {
 
                                   {resume.certifications.length > 0 && (
                                     <div>
-                                        <h3 className="font-bold text-2xl mb-6 flex items-center gap-2"><Award className="h-6 w-6 text-primary" />Certifications</h3>
+                                        <h3 className="font-bold text-xl md:text-2xl mb-6 flex items-center gap-2"><Award className="h-6 w-6 text-primary" />Certifications</h3>
                                         <div className="relative pl-6 space-y-10 border-l-2 border-border/50">
                                             {resume.certifications.map((item) => (
                                                 <div key={item.id} className="relative">
@@ -128,7 +128,7 @@ export default function ResumeSection() {
                                                     <div className="flex items-start gap-4">
                                                         <Image src={item.logoUrl} alt={`${item.issuingOrganization} logo`} width={50} height={50} className="rounded-md border bg-secondary object-contain" data-ai-hint="logo company" />
                                                         <div className='flex-1'>
-                                                          <h4 className="font-semibold text-lg">{item.name}</h4>
+                                                          <h4 className="font-semibold text-base md:text-lg">{item.name}</h4>
                                                           <p className="text-sm" style={{ color: 'rgb(232, 140, 48)' }}>{item.issuingOrganization}</p>
                                                           <p className="text-sm text-muted-foreground">Issued {item.issueDate}</p>
                                                           {item.credentialUrl && (

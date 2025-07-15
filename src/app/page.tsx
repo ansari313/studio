@@ -51,10 +51,10 @@ export default function Home() {
         <section id="hero" className="relative flex flex-col items-center justify-center h-screen min-h-[700px] text-center px-4 -mt-20">
           <div className="container">
             <div className="max-w-4xl mx-auto">
-              <h1 className="text-6xl md:text-8xl font-serif leading-tight animate-pop-in">
+              <h1 className="text-5xl sm:text-6xl md:text-8xl font-serif leading-tight animate-pop-in">
                 Trust nothing, test everything.
               </h1>
-              <p className="mt-6 text-lg text-foreground/80 max-w-2xl mx-auto animate-pop-in [animation-delay:200ms]">
+              <p className="mt-6 text-md sm:text-lg text-foreground/80 max-w-2xl mx-auto animate-pop-in [animation-delay:200ms]">
                 A true QA doesn&apos;t fear AI — we test it, break it, and make it better. If it can’t handle scrutiny, it’s not ready for release.
               </p>
               <Button asChild size="lg" className="mt-10 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8 py-6 text-base animate-pop-in [animation-delay:400ms]">
@@ -73,9 +73,9 @@ export default function Home() {
         <section className="py-16 bg-background">
           <div className="container">
             <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold tracking-tight">Catch Me</h2>
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Catch Me</h2>
             </div>
-            <div className="flex justify-center items-center gap-12">
+            <div className="flex justify-center items-center gap-8 md:gap-12">
                 {socialIcons.map((item, index) => (
                     <a key={index} href={item.href} target="_blank" rel="noopener noreferrer" className="text-muted-foreground transition-transform hover:scale-110">
                        {item.icon}
@@ -90,7 +90,7 @@ export default function Home() {
         <section id="contact" className="py-16 bg-secondary/20">
             <div className="container">
                 <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold tracking-tight">Get In Touch</h2>
+                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Get In Touch</h2>
                     <p className="text-muted-foreground mt-2">Have a project in mind? Let&apos;s talk.</p>
                 </div>
                 <ContactForm />

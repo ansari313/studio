@@ -12,16 +12,16 @@ export default function AdminDashboardPage() {
         <AdminLayout>
             <div className="flex flex-col min-h-screen">
                 <header className="sticky top-0 z-40 border-b bg-background">
-                    <div className="container flex h-16 items-center justify-between">
-                        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+                    <div className="container flex h-16 items-center justify-between px-4 md:px-6">
+                        <h1 className="text-xl md:text-2xl font-bold">Admin Dashboard</h1>
                         <Button asChild variant="ghost">
                             <Link href="/">← Back to Site</Link>
                         </Button>
                     </div>
                 </header>
                 <main className="flex-1 p-4 md:p-8">
-                    <Tabs defaultValue="portfolio">
-                        <TabsList className="grid w-full grid-cols-3 max-w-lg">
+                    <Tabs defaultValue="portfolio" className="w-full">
+                        <TabsList className="grid w-full grid-cols-1 sm:w-auto sm:grid-cols-3 max-w-lg mx-auto sm:mx-0">
                             <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
                             <TabsTrigger value="resume">Resume</TabsTrigger>
                             <TabsTrigger value="messages">Messages</TabsTrigger>

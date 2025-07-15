@@ -185,117 +185,119 @@ export default function ResumeManager() {
 
   return (
     <>
-      <Card>
-        <CardHeader>
-          <CardTitle>Resume Details</CardTitle>
-          <CardDescription>Update your personal details, skills, and CV link.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField control={form.control} name="cardTitle" render={({ field }) => (
-                  <FormItem><FormLabel>Card Title</FormLabel><FormControl><Input placeholder="Curriculum Vitae" {...field} /></FormControl><FormMessage /></FormItem>
+      <div className="space-y-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Resume Details</CardTitle>
+            <CardDescription>Update your personal details, skills, and CV link.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormField control={form.control} name="cardTitle" render={({ field }) => (
+                    <FormItem><FormLabel>Card Title</FormLabel><FormControl><Input placeholder="Curriculum Vitae" {...field} /></FormControl><FormMessage /></FormItem>
+                  )} />
+                  <FormField control={form.control} name="cardSubtitle" render={({ field }) => (
+                    <FormItem><FormLabel>Card Subtitle</FormLabel><FormControl><Input placeholder="Software Engineer" {...field} /></FormControl><FormMessage /></FormItem>
+                  )} />
+                </div>
+
+                <FormField control={form.control} name="summary" render={({ field }) => (
+                  <FormItem><FormLabel>Summary</FormLabel><FormControl><Textarea placeholder="A brief summary about you..." {...field} rows={4} /></FormControl><FormMessage /></FormItem>
                 )} />
-                <FormField control={form.control} name="cardSubtitle" render={({ field }) => (
-                  <FormItem><FormLabel>Card Subtitle</FormLabel><FormControl><Input placeholder="Software Engineer" {...field} /></FormControl><FormMessage /></FormItem>
+
+                <FormField control={form.control} name="imageUrl" render={() => (
+                  <FormItem><FormLabel>Your Image</FormLabel><FormControl><Input type="file" accept="image/*" onChange={handleFileChange} /></FormControl><FormMessage /></FormItem>
                 )} />
-              </div>
 
-              <FormField control={form.control} name="summary" render={({ field }) => (
-                <FormItem><FormLabel>Summary</FormLabel><FormControl><Textarea placeholder="A brief summary about you..." {...field} rows={4} /></FormControl><FormMessage /></FormItem>
-              )} />
-
-              <FormField control={form.control} name="imageUrl" render={() => (
-                <FormItem><FormLabel>Your Image</FormLabel><FormControl><Input type="file" accept="image/*" onChange={handleFileChange} /></FormControl><FormMessage /></FormItem>
-              )} />
-
-              <FormField control={form.control} name="skills" render={() => (
-                <FormItem>
-                  <FormLabel>Key Skills</FormLabel>
-                  <FormControl>
-                    <div>
-                      <div className="flex flex-wrap gap-2 mb-2 p-2 border rounded-md min-h-[40px]">
-                          {form.watch('skills').map((skill) => (
-                              <Badge key={skill} variant="secondary" className="pr-1">
-                                  {skill}
-                                  <button type="button" onClick={() => removeSkill(skill)} className="ml-1 rounded-full p-0.5 hover:bg-destructive/20">
-                                      <span className="sr-only">Remove {skill}</span>
-                                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                                  </button>
-                              </Badge>
-                          ))}
+                <FormField control={form.control} name="skills" render={() => (
+                  <FormItem>
+                    <FormLabel>Key Skills</FormLabel>
+                    <FormControl>
+                      <div>
+                        <div className="flex flex-wrap gap-2 mb-2 p-2 border rounded-md min-h-[40px]">
+                            {form.watch('skills').map((skill) => (
+                                <Badge key={skill} variant="secondary" className="pr-1">
+                                    {skill}
+                                    <button type="button" onClick={() => removeSkill(skill)} className="ml-1 rounded-full p-0.5 hover:bg-destructive/20">
+                                        <span className="sr-only">Remove {skill}</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    </button>
+                                </Badge>
+                            ))}
+                        </div>
+                        <Input placeholder="Type a skill and press Enter" value={skillInput} onChange={(e) => setSkillInput(e.target.value)} onKeyDown={handleSkillKeyDown} />
                       </div>
-                      <Input placeholder="Type a skill and press Enter" value={skillInput} onChange={(e) => setSkillInput(e.target.value)} onKeyDown={handleSkillKeyDown} />
-                    </div>
-                  </FormControl><FormMessage />
-                </FormItem>
-              )} />
+                    </FormControl><FormMessage />
+                  </FormItem>
+                )} />
 
-              <FormField control={form.control} name="cvUrl" render={({ field }) => (
-                <FormItem><FormLabel>CV Download URL</FormLabel><FormControl><Input placeholder="/cv.pdf or https://example.com/cv.pdf" {...field} /></FormControl><FormMessage /></FormItem>
-              )} />
+                <FormField control={form.control} name="cvUrl" render={({ field }) => (
+                  <FormItem><FormLabel>CV Download URL</FormLabel><FormControl><Input placeholder="/cv.pdf or https://example.com/cv.pdf" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
 
-              <div className="flex justify-end">
-                <Button type="submit" disabled={isSubmitting} className="bg-accent hover:bg-accent/90">
-                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Save Details
+                <div className="flex justify-end">
+                  <Button type="submit" disabled={isSubmitting} className="bg-accent hover:bg-accent/90">
+                    {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Save Details
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                    <CardTitle>Work Experience</CardTitle>
+                    <CardDescription>Manage your professional experience entries.</CardDescription>
+                </div>
+                <Button onClick={handleAddNewExperience} className="bg-accent hover:bg-accent/90 w-full sm:w-auto">
+                    <PlusCircle className="mr-2 h-4 w-4" /> Add Experience
                 </Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ExperienceList items={experienceItems} setItems={setExperienceItems} onEdit={handleEditExperience} onDelete={handleDeleteExperience} />
+          </CardContent>
+        </Card>
 
-      <Card className="mt-8">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-              <div>
-                  <CardTitle>Work Experience</CardTitle>
-                  <CardDescription>Manage your professional experience entries.</CardDescription>
-              </div>
-              <Button onClick={handleAddNewExperience} className="bg-accent hover:bg-accent/90">
-                  <PlusCircle className="mr-2 h-4 w-4" /> Add Experience
-              </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <ExperienceList items={experienceItems} setItems={setExperienceItems} onEdit={handleEditExperience} onDelete={handleDeleteExperience} />
-        </CardContent>
-      </Card>
+        <Card>
+          <CardHeader>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                    <CardTitle>Education</CardTitle>
+                    <CardDescription>Manage your educational background.</CardDescription>
+                </div>
+                <Button onClick={handleAddNewEducation} className="bg-accent hover:bg-accent/90 w-full sm:w-auto">
+                    <PlusCircle className="mr-2 h-4 w-4" /> Add Education
+                </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <EducationList items={educationItems} onEdit={handleEditEducation} onDelete={handleDeleteEducation} />
+          </CardContent>
+        </Card>
 
-      <Card className="mt-8">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-              <div>
-                  <CardTitle>Education</CardTitle>
-                  <CardDescription>Manage your educational background.</CardDescription>
-              </div>
-              <Button onClick={handleAddNewEducation} className="bg-accent hover:bg-accent/90">
-                  <PlusCircle className="mr-2 h-4 w-4" /> Add Education
-              </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <EducationList items={educationItems} onEdit={handleEditEducation} onDelete={handleDeleteEducation} />
-        </CardContent>
-      </Card>
-
-      <Card className="mt-8">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-              <div>
-                  <CardTitle>Certifications</CardTitle>
-                  <CardDescription>Manage your professional certifications.</CardDescription>
-              </div>
-              <Button onClick={handleAddNewCertification} className="bg-accent hover:bg-accent/90">
-                  <PlusCircle className="mr-2 h-4 w-4" /> Add Certification
-              </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <CertificationList items={certificationItems} onEdit={handleEditCertification} onDelete={handleDeleteCertification} />
-        </CardContent>
-      </Card>
+        <Card>
+          <CardHeader>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                    <CardTitle>Certifications</CardTitle>
+                    <CardDescription>Manage your professional certifications.</CardDescription>
+                </div>
+                <Button onClick={handleAddNewCertification} className="bg-accent hover:bg-accent/90 w-full sm:w-auto">
+                    <PlusCircle className="mr-2 h-4 w-4" /> Add Certification
+                </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <CertificationList items={certificationItems} onEdit={handleEditCertification} onDelete={handleDeleteCertification} />
+          </CardContent>
+        </Card>
+      </div>
 
       <ExperienceForm isOpen={isExperienceFormOpen} setIsOpen={setIsExperienceFormOpen} itemToEdit={experienceToEdit} onSave={handleSaveExperience} />
       <EducationForm isOpen={isEducationFormOpen} setIsOpen={setIsEducationFormOpen} itemToEdit={educationToEdit} onSave={handleSaveEducation} />
