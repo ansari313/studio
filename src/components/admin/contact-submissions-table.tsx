@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -11,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import type { ContactSubmission } from '@/lib/types';
 import { format } from 'date-fns';
 import { getContactSubmissions, deleteContactSubmission } from '@/actions/contact-actions';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function ContactSubmissionsTable() {
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
@@ -139,25 +141,27 @@ export default function ContactSubmissionsTable() {
       </div>
 
        <Dialog open={isViewOpen} onOpenChange={setIsViewOpen}>
-        <DialogContent>
+        <DialogContent className="max-h-[80vh] flex flex-col">
           <DialogHeader>
             <DialogTitle>Message from {selectedSubmission?.name}</DialogTitle>
             <DialogDescription>
               {selectedSubmission && format(new Date(selectedSubmission.submittedAt), 'PPP p')}
             </DialogDescription>
           </DialogHeader>
-          {selectedSubmission && (
-            <div className="space-y-4 py-4">
-              <div>
-                <h4 className="font-semibold">Email</h4>
-                <p className="text-muted-foreground">{selectedSubmission.email}</p>
+          <ScrollArea className="flex-1 -mx-6">
+            {selectedSubmission && (
+              <div className="space-y-4 px-6 pb-6">
+                <div>
+                  <h4 className="font-semibold">Email</h4>
+                  <p className="text-muted-foreground">{selectedSubmission.email}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold">Message</h4>
+                  <p className="text-muted-foreground whitespace-pre-wrap">{selectedSubmission.message}</p>
+                </div>
               </div>
-              <div>
-                <h4 className="font-semibold">Message</h4>
-                <p className="text-muted-foreground whitespace-pre-wrap">{selectedSubmission.message}</p>
-              </div>
-            </div>
-          )}
+            )}
+          </ScrollArea>
         </DialogContent>
       </Dialog>
     </div>
