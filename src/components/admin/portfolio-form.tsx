@@ -179,121 +179,124 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="sm:max-w-[625px] max-h-[90vh] flex flex-col p-0">
-        <DialogHeader className="p-6 pb-4">
+        <DialogHeader className="p-6 pb-4 border-b">
           <DialogTitle>{itemToEdit ? 'Edit' : 'Add New'} Portfolio Item</DialogTitle>
         </DialogHeader>
-        <ScrollArea className="flex-1">
-          <div className="px-6 pb-6">
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <FormField control={form.control} name="title" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl><Input placeholder="Project Title" {...field} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
-                
-                <FormField control={form.control} name="mediaType" render={({ field }) => (
-                    <FormItem className="space-y-3">
-                      <FormLabel>Media Type</FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex space-x-4"
-                        >
-                          <FormItem className="flex items-center space-x-2 space-y-0">
-                            <FormControl><RadioGroupItem value="image" /></FormControl>
-                            <FormLabel className="font-normal">Image</FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-2 space-y-0">
-                            <FormControl><RadioGroupItem value="video" /></FormControl>
-                            <FormLabel className="font-normal">Video</FormLabel>
-                          </FormItem>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
+        <div className="flex-1 overflow-hidden">
+            <ScrollArea className="h-full">
+            <div className="px-6 py-4">
+                <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <FormField control={form.control} name="title" render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Title</FormLabel>
+                        <FormControl><Input placeholder="Project Title" {...field} /></FormControl>
+                        <FormMessage />
                     </FormItem>
-                  )}
-                />
+                    )} />
+                    
+                    <FormField control={form.control} name="mediaType" render={({ field }) => (
+                        <FormItem className="space-y-3">
+                        <FormLabel>Media Type</FormLabel>
+                        <FormControl>
+                            <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex space-x-4"
+                            >
+                            <FormItem className="flex items-center space-x-2 space-y-0">
+                                <FormControl><RadioGroupItem value="image" /></FormControl>
+                                <FormLabel className="font-normal">Image</FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-2 space-y-0">
+                                <FormControl><RadioGroupItem value="video" /></FormControl>
+                                <FormLabel className="font-normal">Video</FormLabel>
+                            </FormItem>
+                            </RadioGroup>
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
 
-                <FormField control={form.control} name="mediaUrl" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{mediaType === 'image' ? 'Image' : 'Video URL'}</FormLabel>
-                    <FormControl>
-                      {mediaType === 'image' ? (
-                        <Input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleFileChange}
-                        />
-                      ) : (
-                        <Input 
-                          placeholder="https://example.com/media.mp4" 
-                          {...field}
-                        />
-                      )}
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
-                
-                <FormField control={form.control} name="projectUrl" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Project Link</FormLabel>
-                    <FormControl><Input placeholder="https://your-project-live-url.com" {...field} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
-
-                <div className="relative">
-                  <FormField control={form.control} name="description" render={({ field }) => (
-                     <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <RichTextEditor {...field} />
-                      </FormControl>
-                      <FormMessage />
+                    <FormField control={form.control} name="mediaUrl" render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>{mediaType === 'image' ? 'Image' : 'Video URL'}</FormLabel>
+                        <FormControl>
+                        {mediaType === 'image' ? (
+                            <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            />
+                        ) : (
+                            <Input 
+                            placeholder="https://example.com/media.mp4" 
+                            {...field}
+                            value={field.value ?? ''}
+                            />
+                        )}
+                        </FormControl>
+                        <FormMessage />
                     </FormItem>
-                  )} />
-                  <Button type="button" size="sm" variant="outline" className="absolute top-0 right-0" onClick={handleSuggestTags} disabled={isSuggesting}>
-                    {isSuggesting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4" />}
-                    <span className="ml-2 hidden sm:inline">Suggest</span>
-                  </Button>
-                </div>
-                
-                <FormField control={form.control} name="tags" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tags</FormLabel>
-                    <FormControl>
-                      <>
-                        <div className="flex flex-wrap gap-2 mb-2 p-2 border rounded-md min-h-[40px]">
-                            {field.value.map((tag) => (
-                                <Badge key={tag} variant="secondary" className="pr-1">
-                                    {tag}
-                                    <button type="button" onClick={() => removeTag(tag)} className="ml-1 rounded-full p-0.5 hover:bg-destructive/20">
-                                        <span className="sr-only">Remove {tag}</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                                    </button>
-                                </Badge>
-                            ))}
-                        </div>
-                        <Input
-                          placeholder="Type a tag and press Enter"
-                          value={tagInput}
-                          onChange={(e) => setTagInput(e.target.value)}
-                          onKeyDown={handleTagKeyDown}
-                        />
-                      </>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
-              </form>
-            </Form>
-          </div>
-        </ScrollArea>
+                    )} />
+                    
+                    <FormField control={form.control} name="projectUrl" render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Project Link</FormLabel>
+                        <FormControl><Input placeholder="https://your-project-live-url.com" {...field} /></FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )} />
+
+                    <div className="relative">
+                    <FormField control={form.control} name="description" render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                            <RichTextEditor {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )} />
+                    <Button type="button" size="sm" variant="outline" className="absolute top-0 right-0" onClick={handleSuggestTags} disabled={isSuggesting}>
+                        {isSuggesting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4" />}
+                        <span className="ml-2 hidden sm:inline">Suggest</span>
+                    </Button>
+                    </div>
+                    
+                    <FormField control={form.control} name="tags" render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Tags</FormLabel>
+                        <FormControl>
+                        <>
+                            <div className="flex flex-wrap gap-2 mb-2 p-2 border rounded-md min-h-[40px]">
+                                {field.value.map((tag) => (
+                                    <Badge key={tag} variant="secondary" className="pr-1">
+                                        {tag}
+                                        <button type="button" onClick={() => removeTag(tag)} className="ml-1 rounded-full p-0.5 hover:bg-destructive/20">
+                                            <span className="sr-only">Remove {tag}</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                        </button>
+                                    </Badge>
+                                ))}
+                            </div>
+                            <Input
+                            placeholder="Type a tag and press Enter"
+                            value={tagInput}
+                            onChange={(e) => setTagInput(e.target.value)}
+                            onKeyDown={handleTagKeyDown}
+                            />
+                        </>
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )} />
+                </form>
+                </Form>
+            </div>
+            </ScrollArea>
+        </div>
         <DialogFooter className="p-6 pt-4 border-t bg-background">
             <DialogClose asChild><Button type="button" variant="ghost">Cancel</Button></DialogClose>
             <Button type="submit" disabled={isSubmitting} className="bg-accent hover:bg-accent/90" onClick={form.handleSubmit(onSubmit)}>
