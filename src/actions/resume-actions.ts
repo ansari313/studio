@@ -14,7 +14,8 @@ const deserializeData = (data: any, experience: ExperienceItem[]): ResumeData =>
 
 export async function getResumeData(): Promise<ResumeData | null> {
     const resumePromise = db.prepare('SELECT cardTitle, cardSubtitle, summary, skills, cvUrl, imageUrl FROM resume WHERE id = 1').get();
-    const experiencePromise = db.prepare('SELECT * FROM resume_experience ORDER BY sortOrder ASC').all();
+    // Sort by year then month descending to get latest first.
+    const experiencePromise = db.prepare('SELECT * FROM resume_experience ORDER BY SUBSTR(startDate, 4, 4) DESC, SUBSTR(startDate, 1, 2) DESC').all();
     
     const [data, experience] = await Promise.all([resumePromise, experiencePromise]) as [any, ExperienceItem[]];
 
@@ -36,7 +37,7 @@ export async function saveResumeData(data: Omit<ResumeData, 'experience'>) {
     revalidatePath('/admin');
 }
 
-export async function saveExperienceItem(item: Omit<ExperienceItem, 'id'>, id?: string) {
+export async function saveExperienceItem(item: Omit<ExperienceItem, 'id' | 'sortOrder'>, id?: string) {
     const { logoUrl, companyName, position, startDate, endDate, description } = item;
     
     if (id) {

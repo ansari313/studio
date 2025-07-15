@@ -13,6 +13,7 @@ import { Loader2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import type { ExperienceItem } from '@/lib/types';
 import { ScrollArea } from '../ui/scroll-area';
+import { Checkbox } from '../ui/checkbox';
 
 const formSchema = z.object({
   companyName: z.string().min(1, 'Company name is required.'),
@@ -21,13 +22,14 @@ const formSchema = z.object({
   endDate: z.string().min(1, 'End date is required.'),
   description: z.string().min(10, 'Description is required.'),
   logoUrl: z.string().min(1, 'Logo is required.'),
+  isPresent: z.boolean(),
 });
 
 interface ExperienceFormProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   itemToEdit?: ExperienceItem | null;
-  onSave: (item: Omit<ExperienceItem, 'id'>, id?: string) => void;
+  onSave: (item: Omit<ExperienceItem, 'id' | 'sortOrder'>, id?: string) => void;
 }
 
 export default function ExperienceForm({ isOpen, setIsOpen, itemToEdit, onSave }: ExperienceFormProps) {
@@ -42,15 +44,27 @@ export default function ExperienceForm({ isOpen, setIsOpen, itemToEdit, onSave }
       endDate: '',
       description: '',
       logoUrl: '',
+      isPresent: false,
     },
   });
+  
+  const isPresent = form.watch('isPresent');
+
+  useEffect(() => {
+    if (isPresent) {
+      form.setValue('endDate', 'Present');
+    }
+  }, [isPresent, form]);
 
   useEffect(() => {
     if (isOpen) {
       if (itemToEdit) {
-        form.reset(itemToEdit);
+        form.reset({
+          ...itemToEdit,
+          isPresent: itemToEdit.endDate === 'Present',
+        });
       } else {
-        form.reset({ companyName: '', position: '', startDate: '', endDate: '', description: '', logoUrl: 'https://placehold.co/50x50.png' });
+        form.reset({ companyName: '', position: '', startDate: '', endDate: '', description: '', logoUrl: 'https://placehold.co/50x50.png', isPresent: false });
       }
     }
   }, [itemToEdit, form, isOpen]);
@@ -68,7 +82,8 @@ export default function ExperienceForm({ isOpen, setIsOpen, itemToEdit, onSave }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
-    await onSave(values, itemToEdit?.id);
+    const { isPresent, ...saveValues } = values;
+    await onSave(saveValues, itemToEdit?.id);
     setIsSubmitting(false);
   }
 
@@ -94,9 +109,34 @@ export default function ExperienceForm({ isOpen, setIsOpen, itemToEdit, onSave }
                             <FormItem><FormLabel>Start Date</FormLabel><FormControl><Input placeholder="MM/YYYY" {...field} /></FormControl><FormMessage /></FormItem>
                         )} />
                         <FormField control={form.control} name="endDate" render={({ field }) => (
-                            <FormItem><FormLabel>End Date</FormLabel><FormControl><Input placeholder="MM/YYYY or Present" {...field} /></FormControl><FormMessage /></FormItem>
+                            <FormItem>
+                                <FormLabel>End Date</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="MM/YYYY" {...field} disabled={isPresent} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
                         )} />
                     </div>
+                     <FormField
+                        control={form.control}
+                        name="isPresent"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                            <FormControl>
+                                <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                                />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                                <FormLabel>
+                                I am currently working here
+                                </FormLabel>
+                            </div>
+                            </FormItem>
+                        )}
+                    />
                      <FormField control={form.control} name="logoUrl" render={() => (
                         <FormItem>
                             <FormLabel>Company Logo</FormLabel>

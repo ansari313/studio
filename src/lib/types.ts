@@ -17,6 +17,7 @@ export interface ExperienceItem {
   startDate: string; // "MM/YYYY"
   endDate: string; // "MM/YYYY" or "Present"
   description: string;
+  sortOrder: number;
 }
 
 export interface ResumeData {
