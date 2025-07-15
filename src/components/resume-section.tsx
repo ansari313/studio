@@ -129,7 +129,7 @@ export default function ResumeSection() {
                                                         <Image src={item.logoUrl} alt={`${item.issuingOrganization} logo`} width={50} height={50} className="rounded-md border bg-secondary object-contain" data-ai-hint="logo company" />
                                                         <div className='flex-1'>
                                                           <h4 className="font-semibold text-lg">{item.name}</h4>
-                                                          <p className="text-sm text-muted-foreground">{item.issuingOrganization}</p>
+                                                          <p className="text-sm" style={{ color: 'rgb(232, 140, 48)' }}>{item.issuingOrganization}</p>
                                                           <p className="text-sm text-muted-foreground">Issued {item.issueDate}</p>
                                                           {item.credentialUrl && (
                                                               <Button asChild variant="link" className="p-0 h-auto text-sm">
