@@ -60,7 +60,7 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
         form.reset({
           title: itemToEdit.title,
           description: itemToEdit.description,
-          mediaType: itemToToEdit.mediaType,
+          mediaType: itemToEdit.mediaType,
           mediaUrl: itemToEdit.mediaUrl,
           projectUrl: itemToEdit.projectUrl,
           tags: itemToEdit.tags,
