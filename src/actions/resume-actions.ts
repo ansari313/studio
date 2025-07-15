@@ -17,7 +17,7 @@ const deserializeData = (data: any, experience: ExperienceItem[], education: Edu
 export async function getResumeData(): Promise<ResumeData | null> {
     const resumePromise = db.prepare('SELECT cardTitle, cardSubtitle, summary, skills, cvUrl, imageUrl FROM resume WHERE id = 1').get();
     // Sort by year then month descending to get latest first.
-    const experiencePromise = db.prepare('SELECT * FROM resume_experience ORDER BY SUBSTR(endDate, 4, 4) DESC, CASE WHEN SUBSTR(endDate, 1, 2) = "Present" THEN 13 ELSE SUBSTR(endDate, 1, 2) END DESC, SUBSTR(startDate, 4, 4) DESC, SUBSTR(startDate, 1, 2) DESC').all();
+    const experiencePromise = db.prepare("SELECT * FROM resume_experience ORDER BY CASE WHEN endDate = 'Present' THEN 1 ELSE 0 END DESC, SUBSTR(endDate, 4, 4) DESC, SUBSTR(endDate, 1, 2) DESC, SUBSTR(startDate, 4, 4) DESC, SUBSTR(startDate, 1, 2) DESC").all();
     const educationPromise = db.prepare('SELECT * FROM resume_education ORDER BY SUBSTR(endDate, 4, 4) DESC, SUBSTR(endDate, 1, 2) DESC').all();
     const certificationsPromise = db.prepare('SELECT * FROM resume_certifications ORDER BY SUBSTR(issueDate, 4, 4) DESC, SUBSTR(issueDate, 1, 2) DESC').all();
     
