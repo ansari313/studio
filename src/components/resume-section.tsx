@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Download, Loader2, Award, Briefcase } from 'lucide-react';
+import { Download, Loader2, Award, Briefcase, CheckCircle } from 'lucide-react';
 import type { ResumeData } from '@/lib/types';
 import { getResumeData } from '@/actions/resume-actions';
 
@@ -49,10 +49,15 @@ export default function ResumeSection() {
                                 data-ai-hint="portrait person"
                            />
                         </div>
-                        <div>
+                        <div className="w-full px-4">
                             <h4 className="font-semibold text-xl mb-4 text-center">Key Skills</h4>
-                            <ul className="list-disc list-inside text-muted-foreground grid grid-cols-2 gap-x-4 gap-y-2 text-sm sm:text-base">
-                                {resume.skills.map(skill => <li key={skill}>{skill}</li>)}
+                            <ul className="text-muted-foreground space-y-2 text-sm sm:text-base">
+                                {resume.skills.map(skill => (
+                                    <li key={skill} className="flex items-center gap-3">
+                                        <CheckCircle className="h-4 w-4 text-primary flex-shrink-0" />
+                                        <span>{skill}</span>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                          <Button asChild className="bg-accent hover:bg-accent/90 w-full max-w-xs">
