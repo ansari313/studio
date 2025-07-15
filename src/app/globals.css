@@ -135,4 +135,18 @@ body {
   .animate-marquee {
     animation: marquee 20s linear infinite;
   }
+  
+  @media (min-width: 768px) {
+    .md\\:py-24 {
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+    }
+  }
+}
+
+@media (width >= 768px) {
+    .md\:py-24 {
+        padding-top: 0rem;
+        padding-bottom: 0rem;
+    }
 }
