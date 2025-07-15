@@ -179,10 +179,10 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="sm:max-w-[625px] max-h-[90vh] flex flex-col p-0">
-        <DialogHeader className="p-6 pb-4 border-b">
+        <DialogHeader className="p-6 pb-4 border-b flex-shrink-0">
           <DialogTitle>{itemToEdit ? 'Edit' : 'Add New'} Portfolio Item</DialogTitle>
         </DialogHeader>
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 min-h-0">
             <ScrollArea className="h-full">
             <div className="px-6 py-4">
                 <Form {...form}>
@@ -297,7 +297,7 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
             </div>
             </ScrollArea>
         </div>
-        <DialogFooter className="p-6 pt-4 border-t bg-background">
+        <DialogFooter className="p-6 pt-4 border-t flex-shrink-0">
             <DialogClose asChild><Button type="button" variant="ghost">Cancel</Button></DialogClose>
             <Button type="submit" disabled={isSubmitting} className="bg-accent hover:bg-accent/90" onClick={form.handleSubmit(onSubmit)}>
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
