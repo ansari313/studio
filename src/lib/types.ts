@@ -20,12 +20,32 @@ export interface ExperienceItem {
   sortOrder: number;
 }
 
+export interface EducationItem {
+  id: string;
+  institution: string;
+  degree: string;
+  fieldOfStudy: string;
+  startDate: string; // "MM/YYYY"
+  endDate: string; // "MM/YYYY" or "Present"
+  description?: string;
+}
+
+export interface CertificationItem {
+  id: string;
+  name: string;
+  issuingOrganization: string;
+  issueDate: string; // "MM/YYYY"
+  credentialUrl?: string;
+}
+
 export interface ResumeData {
   cardTitle: string;
   cardSubtitle: string;
   summary: string;
   skills: string[];
   experience: ExperienceItem[];
+  education: EducationItem[];
+  certifications: CertificationItem[];
   cvUrl: string;
   imageUrl: string;
 }

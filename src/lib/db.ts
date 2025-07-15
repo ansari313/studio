@@ -1,5 +1,5 @@
 import Database from 'better-sqlite3';
-import type { ExperienceItem } from './types';
+import type { EducationItem, ExperienceItem, CertificationItem } from './types';
 
 const db = new Database('folioflow.db');
 db.pragma('journal_mode = WAL');
@@ -38,6 +38,24 @@ const createTables = () => {
       sortOrder INTEGER NOT NULL
     );
 
+    CREATE TABLE IF NOT EXISTS resume_education (
+      id TEXT PRIMARY KEY,
+      institution TEXT NOT NULL,
+      degree TEXT NOT NULL,
+      fieldOfStudy TEXT NOT NULL,
+      startDate TEXT NOT NULL,
+      endDate TEXT NOT NULL,
+      description TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS resume_certifications (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      issuingOrganization TEXT NOT NULL,
+      issueDate TEXT NOT NULL,
+      credentialUrl TEXT
+    );
+
     CREATE TABLE IF NOT EXISTS contact_submissions (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
@@ -71,7 +89,7 @@ const createTables = () => {
   }
 };
 
-const MOCK_EXPERIENCE: Omit<ExperienceItem, 'id'>[] = [
+const MOCK_EXPERIENCE: Omit<ExperienceItem, 'id' | 'sortOrder'>[] = [
   {
     logoUrl: 'https://placehold.co/50x50.png',
     companyName: 'Coding Pixel',
