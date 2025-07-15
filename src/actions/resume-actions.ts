@@ -106,15 +106,15 @@ export async function deleteEducationItem(id: string) {
 
 // Certification Actions
 export async function saveCertificationItem(item: Omit<CertificationItem, 'id'>, id?: string) {
-    const { name, issuingOrganization, issueDate, credentialUrl } = item;
+    const { logoUrl, name, issuingOrganization, issueDate, credentialUrl } = item;
 
     if (id) {
-        const stmt = db.prepare('UPDATE resume_certifications SET name = ?, issuingOrganization = ?, issueDate = ?, credentialUrl = ? WHERE id = ?');
-        stmt.run(name, issuingOrganization, issueDate, credentialUrl, id);
+        const stmt = db.prepare('UPDATE resume_certifications SET logoUrl = ?, name = ?, issuingOrganization = ?, issueDate = ?, credentialUrl = ? WHERE id = ?');
+        stmt.run(logoUrl, name, issuingOrganization, issueDate, credentialUrl, id);
     } else {
         const newId = Date.now().toString();
-        const stmt = db.prepare('INSERT INTO resume_certifications (id, name, issuingOrganization, issueDate, credentialUrl) VALUES (?, ?, ?, ?, ?)');
-        stmt.run(newId, name, issuingOrganization, issueDate, credentialUrl);
+        const stmt = db.prepare('INSERT INTO resume_certifications (id, logoUrl, name, issuingOrganization, issueDate, credentialUrl) VALUES (?, ?, ?, ?, ?, ?)');
+        stmt.run(newId, logoUrl, name, issuingOrganization, issueDate, credentialUrl);
     }
     
     revalidatePath('/');

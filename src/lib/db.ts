@@ -52,6 +52,7 @@ const createTables = () => {
 
     CREATE TABLE IF NOT EXISTS resume_certifications (
       id TEXT PRIMARY KEY,
+      logoUrl TEXT NOT NULL,
       name TEXT NOT NULL,
       issuingOrganization TEXT NOT NULL,
       issueDate TEXT NOT NULL,
@@ -85,6 +86,18 @@ const createTables = () => {
   } catch (e: any) {
     if (!e.message.includes('duplicate column name')) {
         console.error("Failed to alter education table:", e);
+    }
+  }
+
+  // Add logoUrl column to resume_certifications if it doesn't exist
+  try {
+    const tableInfo = db.pragma('table_info(resume_certifications)');
+    if (!tableInfo.some(col => col.name === 'logoUrl')) {
+        db.exec("ALTER TABLE resume_certifications ADD COLUMN logoUrl TEXT NOT NULL DEFAULT 'https://placehold.co/50x50.png'");
+    }
+  } catch (e: any) {
+    if (!e.message.includes('duplicate column name')) {
+        console.error("Failed to alter certifications table:", e);
     }
   }
 

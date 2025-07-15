@@ -16,6 +16,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import Image from 'next/image';
 
 interface CertificationListProps {
   items: CertificationItem[];
@@ -36,6 +37,14 @@ export default function CertificationList({ items, onEdit, onDelete }: Certifica
     <div className="space-y-4">
       {items.map((item) => (
         <Card key={item.id} className="p-4 flex items-start gap-4">
+          <Image
+            src={item.logoUrl}
+            alt={`${item.issuingOrganization} logo`}
+            width={50}
+            height={50}
+            className="rounded-md border bg-secondary object-contain"
+            data-ai-hint="logo company"
+          />
           <div className="flex-1">
             <h4 className="font-semibold">{item.name}</h4>
             <CardDescription>{item.issuingOrganization}</CardDescription>

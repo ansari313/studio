@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Download, Loader2, Award, Briefcase } from 'lucide-react';
 import type { ResumeData } from '@/lib/types';
 import { getResumeData } from '@/actions/resume-actions';
-import { Separator } from './ui/separator';
 
 export default function ResumeSection() {
     const [resume, setResume] = useState<ResumeData | null>(null);
@@ -76,7 +75,7 @@ export default function ResumeSection() {
                                     <div>
                                         <h3 className="font-bold text-2xl mb-6 flex items-center gap-2"><Briefcase className="h-6 w-6 text-primary" />Work Experience</h3>
                                         <div className="relative pl-6 space-y-10 border-l-2 border-border/50">
-                                            {resume.experience.map((item, index) => (
+                                            {resume.experience.map((item) => (
                                                 <div key={item.id} className="relative">
                                                     <div className="absolute w-3 h-3 bg-primary rounded-full -left-[7px] top-1.5 ring-4 ring-background"></div>
                                                     <div className="flex items-start gap-4">
@@ -122,17 +121,23 @@ export default function ResumeSection() {
                                   {resume.certifications.length > 0 && (
                                     <div>
                                         <h3 className="font-bold text-2xl mb-6 flex items-center gap-2"><Award className="h-6 w-6 text-primary" />Certifications</h3>
-                                        <div className="space-y-4">
-                                            {resume.certifications.map((item, index) => (
-                                                <div key={item.id}>
-                                                    <h4 className="font-semibold text-lg">{item.name}</h4>
-                                                    <p className="text-sm text-muted-foreground">{item.issuingOrganization} &middot; Issued {item.issueDate}</p>
-                                                    {item.credentialUrl && (
-                                                        <Button asChild variant="link" className="p-0 h-auto text-sm">
-                                                            <a href={item.credentialUrl} target="_blank" rel="noopener noreferrer">Show Credential</a>
-                                                        </Button>
-                                                    )}
-                                                     {index < resume.certifications.length - 1 && <Separator className="my-4" />}
+                                        <div className="relative pl-6 space-y-10 border-l-2 border-border/50">
+                                            {resume.certifications.map((item) => (
+                                                <div key={item.id} className="relative">
+                                                    <div className="absolute w-3 h-3 bg-primary rounded-full -left-[7px] top-1.5 ring-4 ring-background"></div>
+                                                    <div className="flex items-start gap-4">
+                                                        <Image src={item.logoUrl} alt={`${item.issuingOrganization} logo`} width={50} height={50} className="rounded-md border bg-secondary object-contain" data-ai-hint="logo company" />
+                                                        <div className='flex-1'>
+                                                          <h4 className="font-semibold text-lg">{item.name}</h4>
+                                                          <p className="text-sm text-muted-foreground">{item.issuingOrganization}</p>
+                                                          <p className="text-sm text-muted-foreground">Issued {item.issueDate}</p>
+                                                          {item.credentialUrl && (
+                                                              <Button asChild variant="link" className="p-0 h-auto text-sm">
+                                                                  <a href={item.credentialUrl} target="_blank" rel="noopener noreferrer">Show Credential</a>
+                                                              </Button>
+                                                          )}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>

@@ -33,6 +33,7 @@ export interface EducationItem {
 
 export interface CertificationItem {
   id: string;
+  logoUrl: string;
   name: string;
   issuingOrganization: string;
   issueDate: string; // "MM/YYYY"

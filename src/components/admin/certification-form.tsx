@@ -18,6 +18,7 @@ const formSchema = z.object({
   issuingOrganization: z.string().min(1, 'Issuing organization is required.'),
   issueDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{4}$/, 'Date must be in MM/YYYY format.'),
   credentialUrl: z.string().url('Please enter a valid URL.').optional().or(z.literal('')),
+  logoUrl: z.string().min(1, 'Logo is required.'),
 });
 
 interface CertificationFormProps {
@@ -37,6 +38,7 @@ export default function CertificationForm({ isOpen, setIsOpen, itemToEdit, onSav
       issuingOrganization: '',
       issueDate: '',
       credentialUrl: '',
+      logoUrl: '',
     },
   });
   
@@ -45,10 +47,21 @@ export default function CertificationForm({ isOpen, setIsOpen, itemToEdit, onSav
       if (itemToEdit) {
         form.reset(itemToEdit);
       } else {
-        form.reset({ name: '', issuingOrganization: '', issueDate: '', credentialUrl: '' });
+        form.reset({ name: '', issuingOrganization: '', issueDate: '', credentialUrl: '', logoUrl: 'https://placehold.co/50x50.png' });
       }
     }
   }, [itemToEdit, form, isOpen]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        form.setValue('logoUrl', reader.result as string, { shouldValidate: true });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
@@ -76,6 +89,13 @@ export default function CertificationForm({ isOpen, setIsOpen, itemToEdit, onSav
                     <FormField control={form.control} name="issueDate" render={({ field }) => (
                         <FormItem><FormLabel>Issue Date</FormLabel><FormControl><Input placeholder="MM/YYYY" {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
+                    <FormField control={form.control} name="logoUrl" render={() => (
+                        <FormItem>
+                            <FormLabel>Organization Logo</FormLabel>
+                            <FormControl><Input type="file" accept="image/*" onChange={handleFileChange} /></FormControl>
+                            <FormMessage />
+                        </FormItem>
+                     )} />
                     <FormField control={form.control} name="credentialUrl" render={({ field }) => (
                         <FormItem>
                             <FormLabel>Credential URL (Optional)</FormLabel>
