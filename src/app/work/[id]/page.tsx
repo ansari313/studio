@@ -1,4 +1,6 @@
 
+'use client';
+
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,19 +10,56 @@ import Header from '@/components/header';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { getPortfolioItem } from '@/actions/portfolio-actions';
 import { Separator } from '@/components/ui/separator';
+import type { PortfolioItem } from '@/lib/types';
+import { useState, useEffect } from 'react';
 
 interface PortfolioDetailPageProps {
     params: { id: string };
 }
 
-export default async function PortfolioDetailPage({ params }: PortfolioDetailPageProps) {
+export default function PortfolioDetailPage({ params }: PortfolioDetailPageProps) {
   const { id } = params;
-  const item = await getPortfolioItem(id);
+  const [item, setItem] = useState<PortfolioItem | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [currentYear, setCurrentYear] = useState<number | null>(null);
 
-  if (!item) {
-    notFound();
+  useEffect(() => {
+    const fetchItem = async () => {
+      try {
+        const portfolioItem = await getPortfolioItem(id);
+        if (!portfolioItem) {
+          notFound();
+        } else {
+          setItem(portfolioItem);
+        }
+      } catch (error) {
+        console.error("Failed to fetch portfolio item", error);
+        // Handle error appropriately
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchItem();
+    setCurrentYear(new Date().getFullYear());
+  }, [id]);
+
+  if (loading) {
+    return (
+        <div className="flex flex-col min-h-screen bg-background">
+            <Header />
+            <main className="flex-1 flex items-center justify-center">
+                <p>Loading...</p>
+            </main>
+        </div>
+    );
   }
 
+  if (!item) {
+    // notFound() will be called inside useEffect, but as a fallback
+    return notFound();
+  }
+  
   return (
     <div className="flex flex-col min-h-screen bg-background">
         <Header />
@@ -89,7 +128,7 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
         </main>
         <footer className="py-6 border-t border-border/50">
             <div className="container text-center text-sm text-muted-foreground">
-                © {new Date().getFullYear()} FolioFlow. All rights reserved.
+                {currentYear && `© ${currentYear} FolioFlow. All rights reserved.`}
             </div>
       </footer>
     </div>

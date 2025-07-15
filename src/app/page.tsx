@@ -1,10 +1,13 @@
 
+'use client';
+
 import Header from '@/components/header';
 import PortfolioGrid from '@/components/portfolio-grid';
 import ContactForm from '@/components/contact-form';
 import ResumeSection from '@/components/resume-section';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
 const socialIcons = [
     {
@@ -35,7 +38,11 @@ const socialIcons = [
 ];
 
 export default function Home() {
-  const currentYear = new Date().getFullYear();
+  const [currentYear, setCurrentYear] = useState<number | null>(null);
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
@@ -92,7 +99,7 @@ export default function Home() {
       </main>
       <footer className="py-6 border-t border-white/10 bg-background">
         <div className="container text-center text-sm text-muted-foreground">
-            © {currentYear} FolioFlow. All rights reserved.
+            {currentYear && `© ${currentYear} FolioFlow. All rights reserved.`}
         </div>
       </footer>
     </div>
