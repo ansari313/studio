@@ -6,59 +6,17 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '@/components/ui/dialog';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Wand2 } from 'lucide-react';
-import { useState, useEffect, forwardRef } from 'react';
+import { useState, useEffect } from 'react';
 import type { PortfolioItem } from '@/lib/types';
 import { suggestPortfolioTags } from '@/ai/flows/suggest-portfolio-tags';
 import { Badge } from '../ui/badge';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { ScrollArea } from '../ui/scroll-area';
-
-// A simple rich text editor component.
-// In a real app, you might use a library like Tiptap or Slate.
-const RichTextEditor = forwardRef<HTMLDivElement, { value: string; onChange: (value: string) => void }>(
-  ({ value, onChange }, ref) => {
-    const contentRef = ref as React.RefObject<HTMLDivElement>;
-
-    useEffect(() => {
-      if (contentRef.current && contentRef.current.innerHTML !== value) {
-        contentRef.current.innerHTML = value;
-      }
-    }, [value, contentRef]);
-
-    const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
-      onChange(e.currentTarget.innerHTML);
-    };
-    
-    const execCmd = (cmd: string) => {
-        document.execCommand(cmd, false, undefined);
-        if (contentRef.current) {
-            onChange(contentRef.current.innerHTML);
-            contentRef.current.focus();
-        }
-    }
-
-    return (
-      <div className="rounded-md border border-input">
-        <div className="p-1 border-b border-input flex items-center gap-1">
-          <Button type="button" variant="outline" size="sm" onMouseDown={(e) => { e.preventDefault(); execCmd('bold'); }}>B</Button>
-          <Button type="button" variant="outline" size="sm" onMouseDown={(e) => { e.preventDefault(); execCmd('insertUnorderedList'); }}>UL</Button>
-          <Button type="button" variant="outline" size="sm" onMouseDown={(e) => { e.preventDefault(); execCmd('insertOrderedList'); }}>OL</Button>
-        </div>
-        <div
-          ref={contentRef}
-          contentEditable
-          onInput={handleInput}
-          className="min-h-[150px] w-full rounded-md bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-        />
-      </div>
-    );
-  }
-);
-RichTextEditor.displayName = 'RichTextEditor';
 
 const formSchema = z.object({
   title: z.string().min(2, 'Title must be at least 2 characters.'),
@@ -131,8 +89,8 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
   };
 
   const handleSuggestTags = async () => {
-    const description = form.getValues('description');
-    if (description.length < 10) {
+    const descriptionValue = form.getValues('description');
+    if (descriptionValue.length < 10) {
       toast({
         title: 'Description too short',
         description: 'Please provide a longer description to suggest tags.',
@@ -142,7 +100,7 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
     }
     setIsSuggesting(true);
     try {
-      const result = await suggestPortfolioTags({ description });
+      const result = await suggestPortfolioTags({ description: descriptionValue });
       const currentTags = form.getValues('tags');
       const mergedTags = [...new Set([...currentTags, ...result.tags])];
       form.setValue('tags', mergedTags, { shouldValidate: true });
@@ -182,11 +140,11 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
         <DialogHeader className="p-6 pb-4 border-b flex-shrink-0">
           <DialogTitle>{itemToEdit ? 'Edit' : 'Add New'} Portfolio Item</DialogTitle>
         </DialogHeader>
-        <div className="flex-1 min-h-0">
+        <div className="flex-1 min-h-0 overflow-y-auto">
             <ScrollArea className="h-full">
             <div className="px-6 py-4">
                 <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <FormField control={form.control} name="title" render={({ field }) => (
                     <FormItem>
                         <FormLabel>Title</FormLabel>
@@ -237,7 +195,9 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
                             />
                         )}
                         </FormControl>
-                        <FormMessage />
+                         {mediaType === 'image' && form.getValues('mediaUrl') && !form.getValues('mediaUrl').startsWith('data:') && (
+                            <FormDescription>Current image URL: {form.getValues('mediaUrl')}</FormDescription>
+                        )}
                     </FormItem>
                     )} />
                     
@@ -249,21 +209,25 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
                     </FormItem>
                     )} />
 
-                    <div className="relative">
                     <FormField control={form.control} name="description" render={({ field }) => (
                         <FormItem>
-                        <FormLabel>Description</FormLabel>
+                           <div className="flex items-center justify-between">
+                                <FormLabel>Description</FormLabel>
+                                <Button type="button" size="sm" variant="ghost" onClick={handleSuggestTags} disabled={isSuggesting}>
+                                    {isSuggesting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4" />}
+                                    <span className="ml-2 hidden sm:inline">Suggest</span>
+                                </Button>
+                           </div>
                         <FormControl>
-                            <RichTextEditor {...field} />
+                            <Textarea
+                                placeholder="Tell us a little bit about your project"
+                                className="resize-y min-h-[150px]"
+                                {...field}
+                            />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
                     )} />
-                    <Button type="button" size="sm" variant="outline" className="absolute top-0 right-0" onClick={handleSuggestTags} disabled={isSuggesting}>
-                        {isSuggesting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4" />}
-                        <span className="ml-2 hidden sm:inline">Suggest</span>
-                    </Button>
-                    </div>
                     
                     <FormField control={form.control} name="tags" render={({ field }) => (
                     <FormItem>
