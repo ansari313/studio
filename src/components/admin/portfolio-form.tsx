@@ -7,14 +7,56 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Wand2 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, forwardRef } from 'react';
 import type { PortfolioItem } from '@/lib/types';
 import { suggestPortfolioTags } from '@/ai/flows/suggest-portfolio-tags';
 import { Badge } from '../ui/badge';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+
+// A simple rich text editor component.
+// In a real app, you might use a library like Tiptap or Slate.
+const RichTextEditor = forwardRef<HTMLDivElement, { value: string; onChange: (value: string) => void }>(
+  ({ value, onChange }, ref) => {
+    const contentRef = ref as React.RefObject<HTMLDivElement>;
+
+    useEffect(() => {
+      if (contentRef.current && contentRef.current.innerHTML !== value) {
+        contentRef.current.innerHTML = value;
+      }
+    }, [value, contentRef]);
+
+    const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
+      onChange(e.currentTarget.innerHTML);
+    };
+    
+    const execCmd = (cmd: string) => {
+        document.execCommand(cmd, false, undefined);
+        if (contentRef.current) {
+            onChange(contentRef.current.innerHTML);
+            contentRef.current.focus();
+        }
+    }
+
+    return (
+      <div className="rounded-md border border-input">
+        <div className="p-1 border-b border-input flex items-center gap-1">
+          <Button type="button" variant="outline" size="sm" onMouseDown={(e) => { e.preventDefault(); execCmd('bold'); }}>B</Button>
+          <Button type="button" variant="outline" size="sm" onMouseDown={(e) => { e.preventDefault(); execCmd('insertUnorderedList'); }}>UL</Button>
+          <Button type="button" variant="outline" size="sm" onMouseDown={(e) => { e.preventDefault(); execCmd('insertOrderedList'); }}>OL</Button>
+        </div>
+        <div
+          ref={contentRef}
+          contentEditable
+          onInput={handleInput}
+          className="min-h-[150px] w-full rounded-md bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 whitespace-pre-wrap"
+        />
+      </div>
+    );
+  }
+);
+RichTextEditor.displayName = 'RichTextEditor';
 
 const formSchema = z.object({
   title: z.string().min(2, 'Title must be at least 2 characters.'),
@@ -134,7 +176,7 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-[525px]">
+      <DialogContent className="sm:max-w-[625px]">
         <DialogHeader>
           <DialogTitle>{itemToEdit ? 'Edit' : 'Add New'} Portfolio Item</DialogTitle>
         </DialogHeader>
@@ -203,9 +245,11 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
 
             <div className="relative">
               <FormField control={form.control} name="description" render={({ field }) => (
-                <FormItem>
+                 <FormItem>
                   <FormLabel>Description</FormLabel>
-                  <FormControl><Textarea placeholder="Describe the project..." {...field} rows={5} /></FormControl>
+                  <FormControl>
+                    <RichTextEditor {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )} />

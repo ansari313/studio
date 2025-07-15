@@ -25,7 +25,7 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
     <div className="flex flex-col min-h-screen bg-background">
         <Header />
         <main className="flex-1 pt-24 pb-12 md:pb-24">
-            <div className="container max-w-4xl mx-auto">
+            <div className="container">
                 <div className="mb-8">
                     <Button asChild variant="ghost" className="text-muted-foreground hover:text-foreground">
                         <Link href="/#work">
@@ -35,7 +35,7 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
                     </Button>
                 </div>
 
-                <article className="space-y-8">
+                <article className="max-w-4xl mx-auto space-y-8">
                     <header className="space-y-4">
                         <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">{item.title}</h1>
                          <div className="flex flex-wrap items-center gap-2">
@@ -70,9 +70,10 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
                         )}
                     </div>
 
-                    <div className="prose prose-invert max-w-none text-muted-foreground text-lg whitespace-pre-wrap">
-                        {item.description}
-                    </div>
+                    <div 
+                      className="prose prose-invert max-w-none text-muted-foreground text-lg"
+                      dangerouslySetInnerHTML={{ __html: item.description }} 
+                    />
                     
                     {item.projectUrl && (
                         <div className="pt-4">
