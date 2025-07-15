@@ -70,8 +70,8 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
                         )}
                     </div>
 
-                    <div className="prose prose-invert max-w-none text-muted-foreground text-lg">
-                        <p>{item.description}</p>
+                    <div className="prose prose-invert max-w-none text-muted-foreground text-lg whitespace-pre-wrap">
+                        {item.description}
                     </div>
                     
                     {item.projectUrl && (
