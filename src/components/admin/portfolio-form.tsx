@@ -178,11 +178,12 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-[625px] max-h-[90vh] flex flex-col">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-[625px] max-h-[90vh] flex flex-col p-0">
+        <DialogHeader className="p-6 pb-4">
           <DialogTitle>{itemToEdit ? 'Edit' : 'Add New'} Portfolio Item</DialogTitle>
         </DialogHeader>
-        <div className="flex-1 overflow-y-auto -mx-6 px-6">
+        <ScrollArea className="flex-1">
+          <div className="px-6 pb-6">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField control={form.control} name="title" render={({ field }) => (
@@ -289,20 +290,18 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
                     <FormMessage />
                   </FormItem>
                 )} />
-                
-                <DialogFooter className="sticky bottom-0 bg-background py-4 -mx-6 px-6 border-t">
-                  <DialogClose asChild><Button type="button" variant="ghost">Cancel</Button></DialogClose>
-                  <Button type="submit" disabled={isSubmitting} className="bg-accent hover:bg-accent/90">
-                    {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Save
-                  </Button>
-                </DialogFooter>
               </form>
             </Form>
-        </div>
+          </div>
+        </ScrollArea>
+        <DialogFooter className="p-6 pt-4 border-t bg-background">
+            <DialogClose asChild><Button type="button" variant="ghost">Cancel</Button></DialogClose>
+            <Button type="submit" disabled={isSubmitting} className="bg-accent hover:bg-accent/90" onClick={form.handleSubmit(onSubmit)}>
+            {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Save
+            </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
-
-    
