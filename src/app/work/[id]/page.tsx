@@ -1,3 +1,4 @@
+
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,7 +16,6 @@ interface PortfolioDetailPageProps {
 export default async function PortfolioDetailPage({ params }: PortfolioDetailPageProps) {
   const { id } = params;
   const item = await getPortfolioItem(id);
-  const currentYear = new Date().getFullYear();
 
   if (!item) {
     notFound();
@@ -35,7 +35,7 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
                     </Button>
                 </div>
 
-                <article className="max-w-4xl mx-auto space-y-8">
+                <article className="max-w-4xl mx-auto space-y-8 px-4">
                     <header className="space-y-4">
                         <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">{item.title}</h1>
                          <div className="flex flex-wrap items-center gap-2">
@@ -89,7 +89,7 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
         </main>
         <footer className="py-6 border-t border-border/50">
             <div className="container text-center text-sm text-muted-foreground">
-                © {currentYear} FolioFlow. All rights reserved.
+                © {new Date().getFullYear()} FolioFlow. All rights reserved.
             </div>
       </footer>
     </div>
