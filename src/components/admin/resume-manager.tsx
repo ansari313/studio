@@ -10,18 +10,19 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, PlusCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import type { ResumeData } from '@/lib/types';
+import type { ResumeData, ExperienceItem } from '@/lib/types';
 import { Badge } from '../ui/badge';
-import { getResumeData, saveResumeData } from '@/actions/resume-actions';
+import { getResumeData, saveResumeData, deleteExperienceItem, saveExperienceItem } from '@/actions/resume-actions';
+import ExperienceList from './experience-list';
+import ExperienceForm from './experience-form';
 
 const formSchema = z.object({
   cardTitle: z.string().min(1, 'Card title is required.'),
   cardSubtitle: z.string().min(1, 'Card subtitle is required.'),
   summary: z.string().min(10, 'Summary must be at least 10 characters.'),
   skills: z.array(z.string()).min(1, 'Please add at least one skill.'),
-  experience: z.string().min(10, 'Experience section must be at least 10 characters.'),
   cvUrl: z.string().url('Please enter a valid URL for the CV.'),
   imageUrl: z.string().min(1, 'Please upload an image.'),
 });
@@ -31,6 +32,9 @@ export default function ResumeManager() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [skillInput, setSkillInput] = useState('');
+  const [experienceItems, setExperienceItems] = useState<ExperienceItem[]>([]);
+  const [isExperienceFormOpen, setIsExperienceFormOpen] = useState(false);
+  const [experienceToEdit, setExperienceToEdit] = useState<ExperienceItem | null>(null);
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -39,27 +43,35 @@ export default function ResumeManager() {
       cardSubtitle: '',
       summary: '',
       skills: [],
-      experience: '',
       cvUrl: '',
       imageUrl: '',
     },
   });
 
-  useEffect(() => {
-    const fetchResumeData = async () => {
-      setLoading(true);
-      try {
-        const data = await getResumeData();
-        if (data) {
-          form.reset(data);
-        }
-      } catch (e) {
-        console.error("Failed to load resume data from database", e);
-        toast({ title: 'Error', description: 'Failed to load resume data.', variant: 'destructive' });
-      } finally {
-        setLoading(false);
+  const fetchResumeData = async () => {
+    setLoading(true);
+    try {
+      const data = await getResumeData();
+      if (data) {
+        form.reset({
+          cardTitle: data.cardTitle,
+          cardSubtitle: data.cardSubtitle,
+          summary: data.summary,
+          skills: data.skills,
+          cvUrl: data.cvUrl,
+          imageUrl: data.imageUrl,
+        });
+        setExperienceItems(data.experience);
       }
-    };
+    } catch (e) {
+      console.error("Failed to load resume data from database", e);
+      toast({ title: 'Error', description: 'Failed to load resume data.', variant: 'destructive' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchResumeData();
   }, [form, toast]);
 
@@ -95,12 +107,43 @@ export default function ResumeManager() {
     setIsSubmitting(true);
     try {
         await saveResumeData(values);
-        toast({ title: 'Resume updated successfully!' });
+        toast({ title: 'Resume details updated successfully!' });
     } catch (e) {
-        toast({ title: 'Failed to save data', description: 'Could not save resume data to the database.', variant: 'destructive' });
+        toast({ title: 'Failed to save data', description: 'Could not save resume details.', variant: 'destructive' });
     }
     setIsSubmitting(false);
   }
+
+  const handleAddNewExperience = () => {
+    setExperienceToEdit(null);
+    setIsExperienceFormOpen(true);
+  };
+
+  const handleEditExperience = (item: ExperienceItem) => {
+    setExperienceToEdit(item);
+    setIsExperienceFormOpen(true);
+  };
+
+  const handleDeleteExperience = async (id: string) => {
+    try {
+      await deleteExperienceItem(id);
+      toast({ title: 'Experience item deleted.' });
+      fetchResumeData();
+    } catch (e) {
+      toast({ title: 'Error', description: 'Could not delete experience item.', variant: 'destructive' });
+    }
+  };
+  
+  const handleSaveExperience = async (item: Omit<ExperienceItem, 'id'>, id?: string) => {
+    try {
+      await saveExperienceItem(item, id);
+      toast({ title: `Experience ${id ? 'updated' : 'added'} successfully.` });
+      setIsExperienceFormOpen(false);
+      fetchResumeData();
+    } catch (e) {
+      toast({ title: 'Error', description: 'Could not save experience item.', variant: 'destructive' });
+    }
+  };
 
   if (loading) {
     return (
@@ -117,51 +160,30 @@ export default function ResumeManager() {
   }
 
   return (
+    <>
     <Card>
       <CardHeader>
-        <CardTitle>Manage Resume</CardTitle>
-        <CardDescription>Update the content of your resume section here.</CardDescription>
+        <CardTitle>Resume Details</CardTitle>
+        <CardDescription>Update your personal details, skills, and CV link.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField control={form.control} name="cardTitle" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Card Title</FormLabel>
-                  <FormControl><Input placeholder="Curriculum Vitae" {...field} /></FormControl>
-                  <FormMessage />
-                </FormItem>
+                <FormItem><FormLabel>Card Title</FormLabel><FormControl><Input placeholder="Curriculum Vitae" {...field} /></FormControl><FormMessage /></FormItem>
               )} />
               <FormField control={form.control} name="cardSubtitle" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Card Subtitle</FormLabel>
-                  <FormControl><Input placeholder="Software Engineer" {...field} /></FormControl>
-                  <FormMessage />
-                </FormItem>
+                <FormItem><FormLabel>Card Subtitle</FormLabel><FormControl><Input placeholder="Software Engineer" {...field} /></FormControl><FormMessage /></FormItem>
               )} />
             </div>
 
             <FormField control={form.control} name="summary" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Summary</FormLabel>
-                <FormControl><Textarea placeholder="A brief summary about you..." {...field} rows={4} /></FormControl>
-                <FormMessage />
-              </FormItem>
+              <FormItem><FormLabel>Summary</FormLabel><FormControl><Textarea placeholder="A brief summary about you..." {...field} rows={4} /></FormControl><FormMessage /></FormItem>
             )} />
 
              <FormField control={form.control} name="imageUrl" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Your Image</FormLabel>
-                <FormControl>
-                  <Input 
-                    type="file" 
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+              <FormItem><FormLabel>Your Image</FormLabel><FormControl><Input type="file" accept="image/*" onChange={handleFileChange} /></FormControl><FormMessage /></FormItem>
             )} />
 
             <FormField control={form.control} name="skills" render={({ field }) => (
@@ -180,43 +202,55 @@ export default function ResumeManager() {
                             </Badge>
                         ))}
                     </div>
-                    <Input
-                      placeholder="Type a skill and press Enter"
-                      value={skillInput}
-                      onChange={(e) => setSkillInput(e.target.value)}
-                      onKeyDown={handleSkillKeyDown}
-                    />
+                    <Input placeholder="Type a skill and press Enter" value={skillInput} onChange={(e) => setSkillInput(e.target.value)} onKeyDown={handleSkillKeyDown} />
                   </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
-            
-            <FormField control={form.control} name="experience" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Experience</FormLabel>
-                <FormControl><Textarea placeholder="Describe your experience..." {...field} rows={6} /></FormControl>
-                <FormMessage />
+                </FormControl><FormMessage />
               </FormItem>
             )} />
 
             <FormField control={form.control} name="cvUrl" render={({ field }) => (
-              <FormItem>
-                <FormLabel>CV Download URL</FormLabel>
-                <FormControl><Input placeholder="/cv.pdf or https://example.com/cv.pdf" {...field} /></FormControl>
-                <FormMessage />
-              </FormItem>
+              <FormItem><FormLabel>CV Download URL</FormLabel><FormControl><Input placeholder="/cv.pdf or https://example.com/cv.pdf" {...field} /></FormControl><FormMessage /></FormItem>
             )} />
 
             <div className="flex justify-end">
               <Button type="submit" disabled={isSubmitting} className="bg-accent hover:bg-accent/90">
-                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Save Changes
+                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Save Details
               </Button>
             </div>
           </form>
         </Form>
       </CardContent>
     </Card>
+
+    <Card className="mt-8">
+      <CardHeader>
+        <div className="flex items-center justify-between">
+            <div>
+                <CardTitle>Work Experience</CardTitle>
+                <CardDescription>Manage your professional experience entries.</CardDescription>
+            </div>
+            <Button onClick={handleAddNewExperience} className="bg-accent hover:bg-accent/90">
+                <PlusCircle className="mr-2 h-4 w-4" /> Add Experience
+            </Button>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <ExperienceList 
+          items={experienceItems}
+          setItems={setExperienceItems}
+          onEdit={handleEditExperience}
+          onDelete={handleDeleteExperience}
+        />
+      </CardContent>
+    </Card>
+
+    <ExperienceForm 
+        isOpen={isExperienceFormOpen}
+        setIsOpen={setIsExperienceFormOpen}
+        itemToEdit={experienceToEdit}
+        onSave={handleSaveExperience}
+    />
+    </>
   );
 }
+

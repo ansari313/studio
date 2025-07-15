@@ -9,12 +9,22 @@ export interface PortfolioItem {
   projectUrl?: string;
 }
 
+export interface ExperienceItem {
+  id: string;
+  logoUrl: string;
+  companyName: string;
+  position: string;
+  startDate: string; // "MM/YYYY"
+  endDate: string; // "MM/YYYY" or "Present"
+  description: string;
+}
+
 export interface ResumeData {
   cardTitle: string;
   cardSubtitle: string;
   summary: string;
   skills: string[];
-  experience: string;
+  experience: ExperienceItem[];
   cvUrl: string;
   imageUrl: string;
 }
