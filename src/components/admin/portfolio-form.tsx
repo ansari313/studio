@@ -60,7 +60,7 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
         form.reset({
           title: itemToEdit.title,
           description: itemToEdit.description,
-          mediaType: itemToEdit.mediaType,
+          mediaType: itemToToEdit.mediaType,
           mediaUrl: itemToEdit.mediaUrl,
           projectUrl: itemToEdit.projectUrl,
           tags: itemToEdit.tags,
@@ -220,7 +220,7 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
                            </div>
                         <FormControl>
                             <Textarea
-                                placeholder="Tell us a little bit about your project"
+                                placeholder="Tell us a little bit about your project. You can use HTML tags like <b> for bold."
                                 className="resize-y min-h-[150px]"
                                 {...field}
                             />

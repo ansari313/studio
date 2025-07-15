@@ -71,7 +71,7 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
                     </div>
 
                     <div 
-                      className="prose prose-invert max-w-none text-muted-foreground text-lg"
+                      className="prose prose-invert max-w-none text-muted-foreground text-lg whitespace-pre-wrap"
                       dangerouslySetInnerHTML={{ __html: item.description }} 
                     />
                     
