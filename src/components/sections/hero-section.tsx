@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,7 @@ export default function HeroSection() {
         <section id="hero" className="relative flex flex-col items-center justify-center text-center px-4 py-32 md:py-48">
             <div className="container">
                 <div className="max-w-4xl mx-auto">
-                    <h1 className="text-5xl sm:text-6xl md:text-8xl font-serif leading-tight animate-pop-in">
+                    <h1 className="text-4xl sm:text-6xl md:text-8xl font-serif leading-tight animate-pop-in">
                         Trust nothing, test everything.
                     </h1>
                     <p className="mt-6 text-md sm:text-lg text-foreground/80 max-w-2xl mx-auto animate-pop-in [animation-delay:200ms]">
