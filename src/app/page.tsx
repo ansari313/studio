@@ -47,8 +47,8 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <Header />
-      <main className="flex-1 pt-20">
-        <section id="hero" className="relative flex flex-col items-center justify-center h-screen min-h-[700px] text-center px-4 -mt-20">
+      <main className="flex-1">
+        <section id="hero" className="relative flex flex-col items-center justify-center text-center px-4 py-32 md:py-48">
           <div className="container">
             <div className="max-w-4xl mx-auto">
               <h1 className="text-5xl sm:text-6xl md:text-8xl font-serif leading-tight animate-pop-in">
@@ -64,13 +64,13 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="work" className="py-16 bg-secondary/20 animate-slide-in-up">
+        <section id="work" className="py-16 md:py-24 bg-secondary/20 animate-slide-in-up">
            <div className="container">
               <PortfolioGrid />
            </div>
         </section>
 
-        <section className="py-16 bg-background">
+        <section className="py-16 md:py-24 bg-background">
           <div className="container">
             <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Catch Me</h2>
@@ -87,7 +87,7 @@ export default function Home() {
 
         <ResumeSection />
 
-        <section id="contact" className="py-16 bg-secondary/20">
+        <section id="contact" className="py-16 md:py-24 bg-secondary/20">
             <div className="container">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Get In Touch</h2>
