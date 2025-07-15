@@ -14,6 +14,7 @@ import type { PortfolioItem } from '@/lib/types';
 import { suggestPortfolioTags } from '@/ai/flows/suggest-portfolio-tags';
 import { Badge } from '../ui/badge';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { ScrollArea } from '../ui/scroll-area';
 
 // A simple rich text editor component.
 // In a real app, you might use a library like Tiptap or Slate.
@@ -176,126 +177,131 @@ export default function PortfolioForm({ isOpen, setIsOpen, itemToEdit, onSave }:
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-[625px]">
+      <DialogContent className="sm:max-w-[625px] max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>{itemToEdit ? 'Edit' : 'Add New'} Portfolio Item</DialogTitle>
         </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField control={form.control} name="title" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Title</FormLabel>
-                <FormControl><Input placeholder="Project Title" {...field} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
-            
-            <FormField control={form.control} name="mediaType" render={({ field }) => (
-                <FormItem className="space-y-3">
-                  <FormLabel>Media Type</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex space-x-4"
-                    >
-                      <FormItem className="flex items-center space-x-2 space-y-0">
-                        <FormControl><RadioGroupItem value="image" /></FormControl>
-                        <FormLabel className="font-normal">Image</FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-2 space-y-0">
-                        <FormControl><RadioGroupItem value="video" /></FormControl>
-                        <FormLabel className="font-normal">Video</FormLabel>
-                      </FormItem>
-                    </RadioGroup>
-                  </FormControl>
+        <ScrollArea className="pr-4 -mr-4">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField control={form.control} name="title" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl><Input placeholder="Project Title" {...field} /></FormControl>
                   <FormMessage />
                 </FormItem>
-              )}
-            />
+              )} />
+              
+              <FormField control={form.control} name="mediaType" render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <FormLabel>Media Type</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="flex space-x-4"
+                      >
+                        <FormItem className="flex items-center space-x-2 space-y-0">
+                          <FormControl><RadioGroupItem value="image" /></FormControl>
+                          <FormLabel className="font-normal">Image</FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-2 space-y-0">
+                          <FormControl><RadioGroupItem value="video" /></FormControl>
+                          <FormLabel className="font-normal">Video</FormLabel>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField control={form.control} name="mediaUrl" render={({ field }) => (
-              <FormItem>
-                <FormLabel>{mediaType === 'image' ? 'Image' : 'Video URL'}</FormLabel>
-                <FormControl>
-                  {mediaType === 'image' ? (
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                    />
-                  ) : (
-                    <Input 
-                      placeholder="https://example.com/media.mp4" 
-                      {...field}
-                    />
-                  )}
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
-            
-            <FormField control={form.control} name="projectUrl" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Project Link</FormLabel>
-                <FormControl><Input placeholder="https://your-project-live-url.com" {...field} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
-
-            <div className="relative">
-              <FormField control={form.control} name="description" render={({ field }) => (
-                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+              <FormField control={form.control} name="mediaUrl" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{mediaType === 'image' ? 'Image' : 'Video URL'}</FormLabel>
                   <FormControl>
-                    <RichTextEditor {...field} />
+                    {mediaType === 'image' ? (
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                      />
+                    ) : (
+                      <Input 
+                        placeholder="https://example.com/media.mp4" 
+                        {...field}
+                      />
+                    )}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
-              <Button type="button" size="sm" variant="outline" className="absolute top-0 right-0" onClick={handleSuggestTags} disabled={isSuggesting}>
-                {isSuggesting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4" />}
-                <span className="ml-2 hidden sm:inline">Suggest</span>
-              </Button>
-            </div>
-            
-            <FormField control={form.control} name="tags" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tags</FormLabel>
-                <FormControl>
-                  <>
-                    <div className="flex flex-wrap gap-2 mb-2 p-2 border rounded-md min-h-[40px]">
-                        {field.value.map((tag) => (
-                            <Badge key={tag} variant="secondary" className="pr-1">
-                                {tag}
-                                <button type="button" onClick={() => removeTag(tag)} className="ml-1 rounded-full p-0.5 hover:bg-destructive/20">
-                                    <span className="sr-only">Remove {tag}</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                                </button>
-                            </Badge>
-                        ))}
-                    </div>
-                    <Input
-                      placeholder="Type a tag and press Enter"
-                      value={tagInput}
-                      onChange={(e) => setTagInput(e.target.value)}
-                      onKeyDown={handleTagKeyDown}
-                    />
-                  </>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
+              
+              <FormField control={form.control} name="projectUrl" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Project Link</FormLabel>
+                  <FormControl><Input placeholder="https://your-project-live-url.com" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
 
-            <DialogFooter>
-              <DialogClose asChild><Button type="button" variant="ghost">Cancel</Button></DialogClose>
-              <Button type="submit" disabled={isSubmitting} className="bg-accent hover:bg-accent/90">
-                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Save
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+              <div className="relative">
+                <FormField control={form.control} name="description" render={({ field }) => (
+                   <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <RichTextEditor {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <Button type="button" size="sm" variant="outline" className="absolute top-0 right-0" onClick={handleSuggestTags} disabled={isSuggesting}>
+                  {isSuggesting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4" />}
+                  <span className="ml-2 hidden sm:inline">Suggest</span>
+                </Button>
+              </div>
+              
+              <FormField control={form.control} name="tags" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tags</FormLabel>
+                  <FormControl>
+                    <>
+                      <div className="flex flex-wrap gap-2 mb-2 p-2 border rounded-md min-h-[40px]">
+                          {field.value.map((tag) => (
+                              <Badge key={tag} variant="secondary" className="pr-1">
+                                  {tag}
+                                  <button type="button" onClick={() => removeTag(tag)} className="ml-1 rounded-full p-0.5 hover:bg-destructive/20">
+                                      <span className="sr-only">Remove {tag}</span>
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                  </button>
+                              </Badge>
+                          ))}
+                      </div>
+                      <Input
+                        placeholder="Type a tag and press Enter"
+                        value={tagInput}
+                        onChange={(e) => setTagInput(e.target.value)}
+                        onKeyDown={handleTagKeyDown}
+                      />
+                    </>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              
+              {/* This empty div is a trick to push the footer down in the flex container */}
+              <div className="!mt-0"></div>
+
+              <DialogFooter className="sticky bottom-0 bg-background py-4 -mx-6 px-6 border-t">
+                <DialogClose asChild><Button type="button" variant="ghost">Cancel</Button></DialogClose>
+                <Button type="submit" disabled={isSubmitting} className="bg-accent hover:bg-accent/90">
+                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Save
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
